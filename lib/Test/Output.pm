@@ -154,7 +154,7 @@ sub stdout_isnt {
   my $ok=($stdout ne $expected);
 
   $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected" ) unless($ok);
+  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expected\nnot expected" ) unless($ok);
 
   return $ok;
 }
