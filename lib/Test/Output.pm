@@ -67,6 +67,9 @@ output_is() compares the output of $coderef to
 $expected_stdout and $expected_stderr, and fails if they do not match.
 output_isnt() being the opposite fails if they do match.
 
+In output_isnt() setting either $expected_stdout or $expected_stderr 
+to C<undef> ignores STDOUT or STEDERR during the test.
+
 =cut
 
 sub output_is {
