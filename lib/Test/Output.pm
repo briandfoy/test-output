@@ -8,7 +8,10 @@ use Test::Output::Tie;
 require Exporter;
 
 our @ISA=qw(Exporter);
-our @EXPORT=qw(output_is stderr_is stdout_is);
+our @EXPORT=qw(output_is output_isnt 
+               stderr_is stderr_isnt 
+               stdout_is stdout_isnt
+             );
 
 my $Test = Test::Builder->new;
 
@@ -18,11 +21,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -55,12 +58,14 @@ Test::Output ties STDOUT and STDERR using Test::Output::Tie.
 
 All functions are exported.
 
-=head2 output_is
+=head2 output_is output_isnt
 
-   output_is( $coderef, $expected_stdout, $expected_stderr, 'comment' );
+   output_is  ( $coderef, $expected_stdout, $expected_stderr, 'comment' );
+   output_isnt( $coderef, $expected_stdout, $expected_stderr, 'comment' );
 
 output_is() compares the output of $coderef to 
 $expected_stdout and $expected_stderr, and fails if they do not match.
+output_isnt() being the opposite fails if they do match.
 
 =cut
 
@@ -82,12 +87,40 @@ sub output_is {
   return $ok;
 }
 
-=head2 stdout_is
+sub output_isnt {
+  my $test=shift;
+  my $expout=shift;
+  my $experr=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
 
-   stderr_is( $coderef, $expected, 'comment' );
+  my($stdout,$stderr)=_errandout($test);
+
+# my $ok=($stdout ne $expout) && ($stderr ne $experr);
+  my $ok;
+
+  if(defined($experr) && defined($expout)) {
+     $ok=($stdout ne $expout) && ($stderr ne $experr);
+   } elsif(defined($expout)) {
+     $ok=($stdout ne $expout);
+   } else {
+     $ok=($stdout ne $experr);
+   }
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expout\nnot expected\n",
+               "STDERR:\n$stderr\nmatching:\n$experr\nnot expected" ) unless($ok);
+
+  return $ok;
+}
+
+=head2 stdout_is stdout_isnt
+
+   stdout_is  ( $coderef, $expected, 'comment' );
+   stdout_isnt( $coderef, $expected, 'comment' );
 
 stdout_is() is similar to output_is() except that it only compares 
-$expected to STDOUT captured from $codref.
+$expected to STDOUT captured from $codref. stdout_isnt() is the opposite.
 
 =cut
 
@@ -107,12 +140,30 @@ sub stdout_is {
   return $ok;
 }
 
-=head2 stderr_is
+sub stdout_isnt {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
 
-   stderr_is( $coderef, $expected, 'comment' );
+  my $stdout=_out($test);
+
+  my $ok=($stdout ne $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected" ) unless($ok);
+
+  return $ok;
+}
+
+=head2 stderr_is stderr_isnt
+
+   stderr_is  ( $coderef, $expected, 'comment' );
+   stderr_isnt( $coderef, $expected, 'comment' );
 
 stderr_is() is similar to output_is(), and stdout_is() except that it only
-compares $expected to STDERR captured from $codref.
+compares $expected to STDERR captured from $codref. Again stderr_isnt() is
+the opposite.
 
 =cut
 
@@ -125,6 +176,22 @@ sub stderr_is {
   my $stderr=_err($test);
 
   my $ok=($stderr eq $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
+
+  return $ok;
+}
+
+sub stderr_isnt {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my $stderr=_err($test);
+
+  my $ok=($stderr ne $expected);
 
   $Test->ok( $ok, $comment );
   $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
