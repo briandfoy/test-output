@@ -4,8 +4,7 @@ package Test::Output::Tie;
 
 You are probably more interested in reading Test::Output.
 
-This module is used by Test::Output as the class used with tie for STDOUT
-and STDERR.
+This module is used to tie STDOUT and STDERR in Test::Output.
 
 =cut
 

@@ -4,6 +4,11 @@ META.yml # Will be created by "make dist"
 Makefile.PL
 README
 lib/Test/Output.pm
+lib/test/Output/Tie.pm
 t/00.load.t
 t/pod-coverage.t
 t/pod.t
+t/output_is.t
+t/stderr_is.t
+t/stdout_is.t
+

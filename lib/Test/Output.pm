@@ -35,8 +35,12 @@ our $VERSION = '0.01';
       print STDERR "Error out.\n";
     }
     
-    output_is(\&writer,"Write out.\n",'Test STDOUT');
-    output_is(\&writer,"Error out.\n",'Test STDERR');
+    output_is(
+              \&writer,
+              "Write out.\n",
+              "Error out.\n",
+              'Test STDOUT & STDERR'
+            );
 
     stdout_is(\&writer,"Write out.\n",'Test STDOUT');
 
@@ -54,26 +58,27 @@ All functions are exported.
 
 =head2 output_is
 
-   output_is( $coderef, $expected, 'comment' );
+   output_is( $coderef, $expected_stdout, $expected_stderr, 'comment' );
 
-output_is() compares $expected to the output produced by $coderef, 
-and fails if they do not match.
+output_is() compares the output of $coderef to 
+$expected_stdout and $expected_stderr, and fails if they do not match.
 
 =cut
 
 sub output_is {
   my $test=shift;
-  my $expected=shift;
+  my $expout=shift;
+  my $experr=shift;
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
   my($stdout,$stderr)=_errandout($test);
 
-  my $ok=($stdout eq $expected) || ($stderr eq $expected);
+  my $ok=($stdout eq $expout) && ($stderr eq $experr);
 
   $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected\n",
-               "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
+  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expout\nas expected\n",
+               "STDERR is:\n$stderr\nnot:\n$experr\nas expected" ) unless($ok);
 
   return $ok;
 }
