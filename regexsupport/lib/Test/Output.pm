@@ -9,7 +9,7 @@ require Exporter;
 
 our @ISA=qw(Exporter);
 our @EXPORT=qw(output_is output_isnt 
-               stderr_is stderr_isnt 
+               stderr_is stderr_isnt stderr_like stderr_unlike
                stdout_is stdout_isnt
              );
 
@@ -195,6 +195,52 @@ sub stderr_isnt {
   my $stderr=_err($test);
 
   my $ok=($stderr ne $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" ) unless($ok);
+
+  return $ok;
+}
+
+sub stderr_like {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my $usable_regex=$Test->maybe_regex( $expected );
+  unless(defined( $usable_regex )) {
+    my $ok = $Test->ok( 0, 'stderr_like' );
+    $Test->diag("'$expected' doesn't look much like a regex to me.");
+    return $ok;
+  }
+
+  my $stderr=_err($test);
+
+  my $ok=($stderr =~ $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDERR:\n$stderr\ndoesn't match:\n$expected\nas expected" ) unless($ok);
+
+  return $ok;
+}
+
+sub stderr_unlike {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my $usable_regex=$Test->maybe_regex( $expected );
+  unless(defined( $usable_regex )) {
+    my $ok = $Test->ok( 0, 'stderr_like' );
+    $Test->diag("     '$expected' doesn't look much like a regex to me.");
+    return $ok;
+  }
+
+  my $stderr=_err($test);
+
+  my $ok=($stderr !~ $expected);
 
   $Test->ok( $ok, $comment );
   $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" ) unless($ok);
