@@ -18,4 +18,5 @@ t/stderr_like.t
 t/stderr_unlike.t
 t/stdout_like.t
 t/stdout_unlike.t
-
+t/output_like.t
+t/output_unlike.t

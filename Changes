@@ -4,6 +4,7 @@ Revision history for Test-Output
         Added chromatic's patch fixing diag messages printing even when
           tests pass.
         Updated stdout_unlike.t to test for success.
+        Updated all tests for successful tests to include diag => ''.
 
 0.04    03/02/2005
         Added methods: output_like, output_unlike
