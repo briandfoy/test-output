@@ -195,7 +195,7 @@ sub stdout_unlike {
     return $ok;
   }
 
-  my $stdout=_err($test);
+  my $stdout=_out($test);
 
   my $ok=($stdout !~ $expected);
 
