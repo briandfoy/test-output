@@ -3,7 +3,7 @@ Added parameter checking to all tests
   coderef or die
   expout or expstderr set or die
 Add tests to ensure they die properly
-Add output_like, stderr_like, stdout_like and unlike
+Add output_like, output_unlike
 Add passing an array as expected to cycle through
 Add options:
   if expected is an array
