@@ -5,10 +5,17 @@ Makefile.PL
 README
 lib/Test/Output.pm
 lib/Test/Output/Tie.pm
+t/lib/Test/Tester.pm
+t/lib/Test/Tester/CaptureRunner.pm
+t/lib/Test/Tester/Capture.pm
+t/lib/Test/Tester/Delegate.pm
 t/00.load.t
 t/pod-coverage.t
 t/pod.t
 t/output_is.t
 t/stderr_is.t
 t/stdout_is.t
+t/output_isnt.t
+t/stderr_isnt.t
+t/stdout_isnt.t
 

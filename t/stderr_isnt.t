@@ -1,5 +1,4 @@
 use Test::More tests => 11;
-use lib 't/lib';
 use Test::Tester;
 use Test::Output;
 

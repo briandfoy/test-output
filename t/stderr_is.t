@@ -1,16 +1,34 @@
-use Test::More tests => 2;
+use Test::More tests => 11;
+use Test::Tester;
 use Test::Output;
-use Test::Builder::Tester;
 
 use strict;
 use warnings;
 
-test_out('ok 1 - Testing STDERR');
-stderr_is(sub {print STDERR "TEST OUT\n"},"TEST OUT\n",'Testing STDERR');
-test_test('output_is handles STDERR');
+check_test( sub {
+            stderr_is(sub {
+                        print STDERR "TEST OUT\n";
+                      },
+                      "TEST OUT\n",
+                      'Testing STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDERR',
+            },'STDERR matching success'
+          );
 
-test_out('not ok 1 - Testing STDERR failure');
-test_err("\n#     Failed test ($0 at line ".line_num(+2).")");
-test_diag("STDERR is:\n# TEST OUT\n# not:\n# TEST OUT STDERR\n# as expected");
-stderr_is(sub {print STDERR "TEST OUT"},"TEST OUT STDERR",'Testing STDERR failure');
-test_test('output_is handles STDERR not found');
+check_test( sub {
+            stderr_is(sub {
+                        print STDERR "TEST OUT\n";
+                      },
+                      "TEST OUT STDERR\n",
+                      'Testing STDERR'
+                    )
+            },{
+              ok => 0,
+              name => 'Testing STDERR',
+              diag => "STDERR is:\nTEST OUT\n\nnot:\nTEST OUT STDERR\n\nas expected\n",
+            },'STDERR not matching failure'
+          );
+

@@ -1,5 +1,4 @@
 use Test::More tests => 32;
-use lib 't/lib';
 use Test::Tester;
 use Test::Output;
 
@@ -17,7 +16,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT',
-            }
+            },'STDOUT matches success'
           );
 
 check_test( sub {
@@ -31,7 +30,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDERR',
-            }
+            },'STDERR matches success'
           );
 
 check_test( sub {
@@ -46,7 +45,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT & STDERR',
-            }
+            },'STDOUT & STDERR match success'
           );
 
 check_test( sub {
@@ -60,7 +59,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT printf',
-            }
+            },'STDOUT printf match success'
           );
 
 check_test( sub {
@@ -75,7 +74,7 @@ check_test( sub {
               ok => 0,
               name => 'Testing STDOUT failure',
               diag => "STDOUT is:\nTEST OUT\nnot:\nTEST OUT STDOUT\nas expected\nSTDERR is:\n\nnot:\n\nas expected\n",
-            }
+            },'STDOUT not matching failure'
           );
 
 check_test( sub {
@@ -89,6 +88,6 @@ check_test( sub {
               ok => 0,
               name => 'Testing STDERR failure',
               diag => "STDOUT is:\n\nnot:\n\nas expected\nSTDERR is:\nTEST OUT\nnot:\nTEST OUT STDERR\nas expected\n",
-            }
+            },'STDERR not matching failure'
           );
 
