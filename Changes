@@ -1,10 +1,14 @@
 Revision history for Test-Output
 
-0.03
+0.03    02/16/2005
+        Reworked entire POD. Thanks to rjbs for his suggestions.
         Additional POD fixes (date to data thanks to everyone who caught
-        that).
+          that).
         New methods: stderr_like, stderr_unlike, stdout_like, stdout_unlike
         Updated README from the default one created by Module::Starter.
+        Moved private methods _err,_out, and _errandout to stderr_from
+          stdout_from and output_from respectively. Allowing access from
+          the test file. Thanks to rjbs for this suggestion.
 
 0.02    02/12/2005
         New methods: output_isnt, stderr_inst, stdout_isnt
