@@ -1,39 +1,94 @@
-use Test::More tests => 6;
+use Test::More tests => 32;
+use lib 't/lib';
+use Test::Tester;
 use Test::Output;
-use Test::Builder::Tester;
 
 use strict;
 use warnings;
 
-test_out('ok 1 - Testing STDOUT');
-output_is(sub {print "TEST OUT\n"},"TEST OUT\n",'','Testing STDOUT');
-test_test('output_is handles STDOUT');
+check_test( sub {
+            output_is(sub {
+                        print "TEST OUT\n";
+                      },
+                      "TEST OUT\n",
+                      '',
+                      'Testing STDOUT'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDOUT',
+            }
+          );
 
-test_out('ok 1 - Testing STDERR');
-output_is(sub {print STDERR "TEST OUT\n"},'',"TEST OUT\n",'Testing STDERR');
-test_test('output_is handles STDERR');
+check_test( sub {
+            output_is(sub {
+                        print STDERR "TEST OUT\n";
+                      },
+                      '',
+                      "TEST OUT\n",
+                      'Testing STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDERR',
+            }
+          );
 
-test_out('ok 1 - Testing STDOUT & STDERR');
-output_is(
-          sub {
-            print "TEST OUT\n"; 
-            print STDERR "TEST ERR\n";
-          },"TEST OUT\n","TEST ERR\n",'Testing STDOUT & STDERR'
-        );
-test_test('output_is handles STDOUT & STDERR');
+check_test( sub {
+            output_is(sub {
+                        print "TEST OUT\n"; 
+                        print STDERR "TEST ERR\n";
+                      },
+                      "TEST OUT\n",
+                      "TEST ERR\n",
+                      'Testing STDOUT & STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDOUT & STDERR',
+            }
+          );
 
-test_out('ok 1 - Testing STDOUT printf');
-output_is(sub {printf("TEST OUT - %d\n",25)},"TEST OUT - 25\n",'','Testing STDOUT printf');
-test_test('output_is handles STDOUT printf');
+check_test( sub {
+            output_is(sub {
+                        printf("TEST OUT - %d\n",25);
+                      },
+                      "TEST OUT - 25\n",
+                      '',
+                      'Testing STDOUT printf'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDOUT printf',
+            }
+          );
 
-test_out('not ok 1 - Testing STDOUT failure');
-test_err("\n#     Failed test ($0 at line ".line_num(+2).")");
-test_diag("STDOUT is:\n# TEST OUT\n# not:\n# TEST OUT STDOUT\n# as expected\n# STDERR is:\n# \n# not:\n# \n# as expected");
-output_is(sub {print "TEST OUT"},"TEST OUT STDOUT",'','Testing STDOUT failure');
-test_test('output_is handles STDOUT not found');
+check_test( sub {
+            output_is(sub {
+                        print "TEST OUT";
+                      },
+                      "TEST OUT STDOUT",
+                      '',
+                      'Testing STDOUT failure'
+                    )
+            }, {
+              ok => 0,
+              name => 'Testing STDOUT failure',
+              diag => "STDOUT is:\nTEST OUT\nnot:\nTEST OUT STDOUT\nas expected\nSTDERR is:\n\nnot:\n\nas expected\n",
+            }
+          );
 
-test_out('not ok 1 - Testing STDERR failure');
-test_err("\n#     Failed test ($0 at line ".line_num(+2).")");
-test_diag("STDOUT is:\n# \n# not:\n# \n# as expected\n# STDERR is:\n# TEST OUT\n# not:\n# TEST OUT STDERR\n# as expected");
-output_is(sub {print STDERR "TEST OUT"},'',"TEST OUT STDERR",'Testing STDERR failure');
-test_test('output_is handles STDERR not found');
+check_test( sub {
+            output_is(sub {
+                      print STDERR "TEST OUT"},
+                      '',
+                      "TEST OUT STDERR",
+                      'Testing STDERR failure'
+                    )
+            }, {
+              ok => 0,
+              name => 'Testing STDERR failure',
+              diag => "STDOUT is:\n\nnot:\n\nas expected\nSTDERR is:\nTEST OUT\nnot:\nTEST OUT STDERR\nas expected\n",
+            }
+          );
+
