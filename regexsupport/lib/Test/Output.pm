@@ -233,8 +233,8 @@ sub stderr_unlike {
 
   my $usable_regex=$Test->maybe_regex( $expected );
   unless(defined( $usable_regex )) {
-    my $ok = $Test->ok( 0, 'stderr_like' );
-    $Test->diag("     '$expected' doesn't look much like a regex to me.");
+    my $ok = $Test->ok( 0, 'stderr_unlike' );
+    $Test->diag("'$expected' doesn't look much like a regex to me.");
     return $ok;
   }
 
