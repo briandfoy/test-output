@@ -23,11 +23,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 SYNOPSIS
 
@@ -98,8 +98,8 @@ sub stdout_is {
 
   my $ok=($stdout eq $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected" );
+  $Test->ok( $ok, $description ) ||
+   $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -114,8 +114,8 @@ sub stdout_isnt {
 
   my $ok=($stdout ne $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expected\nnot expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -150,8 +150,8 @@ sub stdout_like {
 
   my $ok=($stdout =~ $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDOUT:\n$stdout\ndoesn't match:\n$expected\nas expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDOUT:\n$stdout\ndoesn't match:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -170,8 +170,9 @@ sub stdout_unlike {
 
   my $ok=($stdout !~ $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDOUT:\n$stdout\nmatches:\n$expected\nnot expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDOUT:\n$stdout\nmatches:\n$expected\nnot expected" );
+
 
   return $ok;
 }
@@ -204,8 +205,8 @@ sub stderr_is {
 
   my $ok=($stderr eq $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -220,8 +221,8 @@ sub stderr_isnt {
 
   my $ok=($stderr ne $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -257,8 +258,8 @@ sub stderr_like {
 
   my $ok=($stderr =~ $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDERR:\n$stderr\ndoesn't match:\n$expected\nas expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDERR:\n$stderr\ndoesn't match:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -277,8 +278,8 @@ sub stderr_unlike {
 
   my $ok=($stderr !~ $expected);
 
-  $Test->ok( $ok, $description );
-  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" );
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -378,8 +379,7 @@ sub output_is {
     }
   }
 
-  $Test->ok( $ok, $description );
-  $Test->diag($diag);
+  $Test->ok( $ok, $description ) || $Test->diag($diag);
 
   return $ok;
 }
@@ -424,8 +424,7 @@ sub output_isnt {
     }
   }
 
-  $Test->ok( $ok, $description );
-  $Test->diag($diag);
+  $Test->ok( $ok, $description ) || $Test->diag($diag);
 
   return $ok;
 }
@@ -508,8 +507,7 @@ sub output_like {
     }
   }
 
-  $Test->ok( $ok, $description );
-  $Test->diag( $diag );
+  $Test->ok( $ok, $description ) || $Test->diag( $diag );
 
   return $ok;
 }
@@ -549,8 +547,7 @@ sub output_unlike {
     $diag.="STDERR:\n$stderr\nmatches:\n$experr\nnot expected";
   }
 
-  $Test->ok( $ok, $description );
-  $Test->diag( $diag );
+  $Test->ok( $ok, $description ) || $Test->diag( $diag );
 
   return $ok;
 }
@@ -642,7 +639,10 @@ sub _chkregex {
     my $usable_regex=$Test->maybe_regex( $regexs{$test} );
     unless(defined( $usable_regex )) {
       my $ok = $Test->ok( 0, $test );
+
       $Test->diag("'$regexs{$test}' doesn't look much like a regex to me.");
+#       unless $ok;
+
       return $ok;
     }
   }

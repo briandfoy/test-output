@@ -9,14 +9,13 @@ check_test( sub {
             stderr_unlike(sub {
                         print STDERR "TEST OUT\n";
                       },
-                      qr/OUT/i,
+                      qr/out/,
                       'Testing STDERR'
                     )
             },{
-              ok => 0,
+              ok => 1,
               name => 'Testing STDERR',
               diag => '',
-              diag => "STDERR:\nTEST OUT\n\nmatches:\n(?i-xsm:OUT)\nnot expected\n",
             },'STDERR matching success'
           );
 

@@ -9,15 +9,14 @@ check_test( sub {
             stdout_unlike(sub {
                         print "TEST OUT\n";
                       },
-                      qr/OUT/i,
+                      qr/out/,
                       'Testing STDOUT'
                     )
             },{
-              ok => 0,
+              ok => 1,
               name => 'Testing STDOUT',
               diag => '',
-              diag => "STDOUT:\nTEST OUT\n\nmatches:\n(?i-xsm:OUT)\nnot expected\n",
-            },'STDOUT matching success'
+            },'STDOUT not matching success'
           );
 
 check_test( sub {
@@ -45,6 +44,6 @@ check_test( sub {
               ok => 0,
               name => 'Testing STDOUT',
               diag => "STDOUT:\nTEST OUT\n\nmatches:\n(?-xism:OUT)\nnot expected\n",
-            },'STDOUT not matching failure'
+            },'STDOUT matching failure'
           );
 

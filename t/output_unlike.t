@@ -1,4 +1,4 @@
-use Test::More tests => 45;
+use Test::More tests => 48;
 use Test::Tester;
 use Test::Output;
 
@@ -17,6 +17,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT and STDERR match',
+              diag => '',
             },'STDOUT and STDOUT not matching success'
           );
 
@@ -32,6 +33,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT and STDERR match',
+              diag => '',
             },'STDOUT and STDOUT not matching success'
           );
 
@@ -47,6 +49,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT and STDERR match',
+              diag => '',
             },'STDOUT and STDOUT not matching success'
           );
 

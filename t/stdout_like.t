@@ -1,4 +1,4 @@
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Tester;
 use Test::Output;
 
@@ -15,6 +15,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT',
+              diag => '',
             },'STDOUT matching success'
           );
 

@@ -1,4 +1,4 @@
-use Test::More tests => 65;
+use Test::More tests => 72;
 use Test::Tester;
 use Test::Output;
 
@@ -16,6 +16,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT',
+              diag => '',
             },'STDOUT matches success'
           );
 
@@ -30,6 +31,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDERR',
+              diag => '',
             },'STDERR matches success'
           );
 
@@ -45,6 +47,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT & STDERR',
+              diag => '',
             },'STDOUT & STDERR match success'
           );
 
@@ -59,6 +62,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT printf',
+              diag => '',
             },'STDOUT printf match success'
           );
 
@@ -118,6 +122,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT & STDERR',
+              diag => '',
             },'STDOUT undef match success'
           );
 
@@ -133,6 +138,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT & STDERR',
+              diag => '',
             },'STDOUT match success STDERR undef'
           );
 
@@ -146,6 +152,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT & STDERR',
+              diag => '',
             },'STDOUT & STDERR undef match success'
           );
 

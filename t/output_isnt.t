@@ -1,4 +1,4 @@
-use Test::More tests => 66;
+use Test::More tests => 72;
 use Test::Tester;
 use Test::Output;
 
@@ -16,6 +16,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT',
+              diag => '',
             },'STDOUT not equal success'
           );
 
@@ -31,6 +32,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDERR',
+              diag => '',
             },'STDERR not equal success'
           );
 
@@ -46,6 +48,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT & STDERR',
+              diag => '',
             },'STDOUT & STDERR not equal success'
           );
 
@@ -60,6 +63,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT printf',
+              diag => '',
             },'STDOUT printf not equal success'
           );
 
@@ -74,6 +78,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDERR printf',
+              diag => '',
             },'STDERR printf not equal success'
           );
 
@@ -134,6 +139,7 @@ check_test( sub {
             }, {
               ok => 1,
               name => 'Testing STDERR failure',
+              diag => '',
             },'STDOUT & STDERR not matching success'
           );
 

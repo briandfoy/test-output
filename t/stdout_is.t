@@ -1,4 +1,4 @@
-use Test::More tests => 16;
+use Test::More tests => 18;
 use Test::Tester;
 use Test::Output;
 
@@ -15,6 +15,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT',
+              diag => '',
             },'STDOUT matches success'
           );
 
@@ -28,6 +29,7 @@ check_test( sub {
             },{
               ok => 1,
               name => 'Testing STDOUT printf',
+              diag => '',
             },'STDOUT printf matches success'
           );
 
