@@ -159,6 +159,51 @@ sub stdout_isnt {
   return $ok;
 }
 
+sub stdout_like {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my $usable_regex=$Test->maybe_regex( $expected );
+  unless(defined( $usable_regex )) {
+    my $ok = $Test->ok( 0, 'stdout_like' );
+    $Test->diag("'$expected' doesn't look much like a regex to me.");
+    return $ok;
+  }
+
+  my $stdout=_out($test);
+
+  my $ok=($stdout =~ $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDOUT:\n$stdout\ndoesn't match:\n$expected\nas expected" ) unless($ok);
+
+  return $ok;
+}
+
+sub stdout_unlike {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my $usable_regex=$Test->maybe_regex( $expected );
+  unless(defined( $usable_regex )) {
+    my $ok = $Test->ok( 0, 'stdout_unlike' );
+    $Test->diag("'$expected' doesn't look much like a regex to me.");
+    return $ok;
+  }
+
+  my $stdout=_err($test);
+
+  my $ok=($stdout !~ $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDOUT:\n$stdout\nmatches:\n$expected\nnot expected" ) unless($ok);
+
+  return $ok;
+}
 =head2 stderr_is stderr_isnt
 
    stderr_is  ( $coderef, $expected, 'comment' );
