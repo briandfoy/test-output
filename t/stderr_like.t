@@ -29,7 +29,7 @@ check_test( sub {
               ok => 0,
               name => 'stderr_like',
               diag => "'OUT' doesn't look much like a regex to me.\n",
-            },'STDERR matching success'
+            },'STDERR bad regex success'
           );
 
 check_test( sub {

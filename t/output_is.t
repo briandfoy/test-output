@@ -1,4 +1,4 @@
-use Test::More tests => 32;
+use Test::More tests => 65;
 use Test::Tester;
 use Test::Output;
 
@@ -73,7 +73,7 @@ check_test( sub {
             }, {
               ok => 0,
               name => 'Testing STDOUT failure',
-              diag => "STDOUT is:\nTEST OUT\nnot:\nTEST OUT STDOUT\nas expected\nSTDERR is:\n\nnot:\n\nas expected\n",
+              diag => "STDOUT is:\nTEST OUT\nnot:\nTEST OUT STDOUT\nas expected\n",
             },'STDOUT not matching failure'
           );
 
@@ -87,7 +87,94 @@ check_test( sub {
             }, {
               ok => 0,
               name => 'Testing STDERR failure',
-              diag => "STDOUT is:\n\nnot:\n\nas expected\nSTDERR is:\nTEST OUT\nnot:\nTEST OUT STDERR\nas expected\n",
+              diag => "STDERR is:\nTEST OUT\nnot:\nTEST OUT STDERR\nas expected\n",
             },'STDERR not matching failure'
+          );
+
+check_test( sub {
+            output_is(sub {
+                      print "TEST ERR";
+                      print STDERR "TEST OUT"},
+                      'TEST ERR STDOUT',
+                      "TEST OUT STDERR",
+                      'Testing STDERR failure'
+                    )
+            }, {
+              ok => 0,
+              name => 'Testing STDERR failure',
+              diag => "STDOUT is:\nTEST ERR\nnot:\nTEST ERR STDOUT\nas expected\nSTDERR is:\nTEST OUT\nnot:\nTEST OUT STDERR\nas expected\n",
+            },'STDOUT and STDERR not matching failure'
+          );
+
+check_test( sub {
+            output_is(sub {
+                        print "TEST OUT\n"; 
+                        print STDERR "TEST ERR\n";
+                      },
+                      undef,
+                      "TEST ERR\n",
+                      'Testing STDOUT & STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDOUT & STDERR',
+            },'STDOUT undef match success'
+          );
+
+check_test( sub {
+            output_is(sub {
+                        print "TEST OUT\n"; 
+                        print STDERR "TEST ERR\n";
+                      },
+                      "TEST OUT\n",
+                      undef,
+                      'Testing STDOUT & STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDOUT & STDERR',
+            },'STDOUT match success STDERR undef'
+          );
+
+check_test( sub {
+            output_is(sub {
+                      },
+                      undef,
+                      undef,
+                      'Testing STDOUT & STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDOUT & STDERR',
+            },'STDOUT & STDERR undef match success'
+          );
+
+check_test( sub {
+            output_is(sub {
+                      print "TEST ERR";
+                      print STDERR "TEST OUT"},
+                      undef,
+                      undef,
+                      'Testing STDERR failure'
+                    )
+            }, {
+              ok => 0,
+              name => 'Testing STDERR failure',
+              diag => "STDOUT is:\nTEST ERR\nnot:\n\nas expected\nSTDERR is:\nTEST OUT\nnot:\n\nas expected\n",
+            },'STDOUT and STDERR not matching failure'
+          );
+
+check_test( sub {
+            output_is(sub {
+                      print STDERR "TEST OUT"},
+                      undef,
+                      undef,
+                      'Testing STDERR failure'
+                    )
+            }, {
+              ok => 0,
+              name => 'Testing STDERR failure',
+              diag => "STDERR is:\nTEST OUT\nnot:\n\nas expected\n",
+            },'STDOUT undef and STDERR not matching failure'
           );
 

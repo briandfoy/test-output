@@ -8,10 +8,12 @@ use Test::Output::Tie;
 require Exporter;
 
 our @ISA=qw(Exporter);
-our @EXPORT=qw(output_from output_is output_isnt 
-               stderr_from stderr_is stderr_isnt stderr_like stderr_unlike
-               stdout_from stdout_is stdout_isnt stdout_like stdout_unlike
+our @EXPORT=qw(output_is output_isnt output_like output_unlike
+               stderr_is stderr_isnt stderr_like stderr_unlike
+               stdout_is stdout_isnt stdout_like stdout_unlike
              );
+
+our @EXPORT_OK=qw(output_from stderr_from stdout_from);
 
 my $Test = Test::Builder->new;
 
@@ -21,11 +23,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 SYNOPSIS
 
@@ -76,8 +78,8 @@ All functions are exported.
 
 =item B<stdout_isnt>
 
-   stdout_is  ( $coderef, $expected, 'comment' );
-   stdout_isnt( $coderef, $expected, 'comment' );
+   stdout_is  ( $coderef, $expected, 'description' );
+   stdout_isnt( $coderef, $expected, 'description' );
 
 stdout_is() captures output sent to STDOUT from $coderef and compares
 it against $expected. The test passes if equal.
@@ -90,14 +92,14 @@ sub stdout_is {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
   my $stdout=stdout_from($test);
 
   my $ok=($stdout eq $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -106,14 +108,14 @@ sub stdout_isnt {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
   my $stdout=stdout_from($test);
 
   my $ok=($stdout ne $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expected\nnot expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -122,8 +124,8 @@ sub stdout_isnt {
 
 =item B<stdout_unlike>
 
-   stdout_like  ( $coderef, qr/$expected/, 'comment' );
-   stdout_unlike( $coderef, qr/$expected/, 'comment' );
+   stdout_like  ( $coderef, qr/$expected/, 'description' );
+   stdout_unlike( $coderef, qr/$expected/, 'description' );
 
 stdout_like() captures the output sent to STDOUT from $coderef and compares
 it to the regex in $expected. The test passes if the regex matches.
@@ -138,21 +140,18 @@ sub stdout_like {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
-  my $usable_regex=$Test->maybe_regex( $expected );
-  unless(defined( $usable_regex )) {
-    my $ok = $Test->ok( 0, 'stdout_like' );
-    $Test->diag("'$expected' doesn't look much like a regex to me.");
-    return $ok;
+  unless(my $regextest=_chkregex('stdout_like' => $expected)) {
+    return $regextest;
   }
 
   my $stdout=stdout_from($test);
 
   my $ok=($stdout =~ $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT:\n$stdout\ndoesn't match:\n$expected\nas expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDOUT:\n$stdout\ndoesn't match:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -161,21 +160,18 @@ sub stdout_unlike {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
-  my $usable_regex=$Test->maybe_regex( $expected );
-  unless(defined( $usable_regex )) {
-    my $ok = $Test->ok( 0, 'stdout_unlike' );
-    $Test->diag("'$expected' doesn't look much like a regex to me.");
-    return $ok;
+  unless(my $regextest=_chkregex('stdout_unlike' => $expected)) {
+    return $regextest;
   }
 
   my $stdout=stdout_from($test);
 
   my $ok=($stdout !~ $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT:\n$stdout\nmatches:\n$expected\nnot expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDOUT:\n$stdout\nmatches:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -188,8 +184,8 @@ sub stdout_unlike {
 
 =item B<stderr_isnt>
 
-   stderr_is  ( $coderef, $expected, 'comment' );
-   stderr_isnt( $coderef, $expected, 'comment' );
+   stderr_is  ( $coderef, $expected, 'description' );
+   stderr_isnt( $coderef, $expected, 'description' );
 
 stderr_is() is similar to stdout_is, except that it captures STDERR. The
 test passes if STDERR from $coderef equals $expected.
@@ -202,14 +198,14 @@ sub stderr_is {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
   my $stderr=stderr_from($test);
 
   my $ok=($stderr eq $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -218,14 +214,14 @@ sub stderr_isnt {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
   my $stderr=stderr_from($test);
 
   my $ok=($stderr ne $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -234,8 +230,8 @@ sub stderr_isnt {
 
 =item B<stderr_unlike>
 
-   stderr_like  ( $coderef, qr/$expected/, 'comment' );
-   stderr_unlike( $coderef, qr/$expected/, 'comment' );
+   stderr_like  ( $coderef, qr/$expected/, 'description' );
+   stderr_unlike( $coderef, qr/$expected/, 'description' );
 
 stderr_like() is similar to stdout_like() except that it compares the regex 
 $expected to STDERR captured from $codref. The test passes if the regex
@@ -251,21 +247,18 @@ sub stderr_like {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
-  my $usable_regex=$Test->maybe_regex( $expected );
-  unless(defined( $usable_regex )) {
-    my $ok = $Test->ok( 0, 'stderr_like' );
-    $Test->diag("'$expected' doesn't look much like a regex to me.");
-    return $ok;
+  unless(my $regextest=_chkregex('stderr_like' => $expected)) {
+    return $regextest;
   }
 
   my $stderr=stderr_from($test);
 
   my $ok=($stderr =~ $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDERR:\n$stderr\ndoesn't match:\n$expected\nas expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDERR:\n$stderr\ndoesn't match:\n$expected\nas expected" );
 
   return $ok;
 }
@@ -274,21 +267,18 @@ sub stderr_unlike {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
-  my $usable_regex=$Test->maybe_regex( $expected );
-  unless(defined( $usable_regex )) {
-    my $ok = $Test->ok( 0, 'stderr_unlike' );
-    $Test->diag("'$expected' doesn't look much like a regex to me.");
-    return $ok;
+  unless(my $regextest=_chkregex('stderr_unlike' => $expected)) {
+    return $regextest;
   }
 
   my $stderr=stderr_from($test);
 
   my $ok=($stderr !~ $expected);
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" );
 
   return $ok;
 }
@@ -301,8 +291,8 @@ sub stderr_unlike {
 
 =item B<output_isnt>
 
-   output_is  ( $coderef, $expected_stdout, $expected_stderr, 'comment' );
-   output_isnt( $coderef, $expected_stdout, $expected_stderr, 'comment' );
+   output_is  ( $coderef, $expected_stdout, $expected_stderr, 'description' );
+   output_isnt( $coderef, $expected_stdout, $expected_stderr, 'description' );
 
 The output_is() function is a combination of the stdout_is() and stderr_is()
 functions. For example:
@@ -340,13 +330,11 @@ is functionally equivalent to
 As with output_is(), setting either $expected_stdout or $expected_stderr to
 C<undef> ignores the output to that facility.
 
-  output_isnt(sub {print "foo"; print STDERR "bar";},undef,'foo',);
+  output_isnt(sub {print "foo"; print STDERR "bar";},undef,'foo');
 
 is the same as
 
   stderr_is(sub {print STDERR "bar";},'foo') 
-
-=back
 
 =cut
 
@@ -355,25 +343,43 @@ sub output_is {
   my $expout=shift;
   my $experr=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
   my($stdout,$stderr)=output_from($test);
 
-  my $ok;
+  my $ok=1;
+  my $diag;
 
   if(defined($experr) && defined($expout)) {
-     $ok=($stdout eq $expout) && ($stderr eq $experr);
-   } elsif(defined($expout)) {
-     $ok=($stdout eq $expout);
-   } elsif(defined($experr)) {
-     $ok=($stderr eq $experr);
-   } else {
-     $ok=($stderr eq '') && ($stdout eq '');
-   }
+    unless($stdout eq $expout) {
+      $ok=0;
+      $diag.="STDOUT is:\n$stdout\nnot:\n$expout\nas expected";
+    }
+    unless($stderr eq $experr) {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR is:\n$stderr\nnot:\n$experr\nas expected";
+    }
+  } elsif(defined($expout)) {
+    $ok=($stdout eq $expout);
+    $diag.="STDOUT is:\n$stdout\nnot:\n$expout\nas expected";
+  } elsif(defined($experr)) {
+    $ok=($stderr eq $experr);
+    $diag.="STDERR is:\n$stderr\nnot:\n$experr\nas expected";
+  } else {
+    unless($stdout eq '') {
+      $ok=0;
+      $diag.="STDOUT is:\n$stdout\nnot:\n\nas expected";
+    }
+    unless($stderr eq '') {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR is:\n$stderr\nnot:\n\nas expected";
+    }
+  }
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expout\nas expected\n",
-               "STDERR is:\n$stderr\nnot:\n$experr\nas expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag($diag);
 
   return $ok;
 }
@@ -383,25 +389,168 @@ sub output_isnt {
   my $expout=shift;
   my $experr=shift;
   my $options=shift if(ref($_[0]));
-  my $comment=shift;
+  my $description=shift;
 
   my($stdout,$stderr)=output_from($test);
 
-  my $ok;
+  my $ok=1;
+  my $diag;
 
   if(defined($experr) && defined($expout)) {
-     $ok=($stdout ne $expout) && ($stderr ne $experr);
-   } elsif(defined($expout)) {
-     $ok=($stdout ne $expout);
-   } elsif(defined($experr)) {
-     $ok=($stderr ne $experr);
-   } else {
-     $ok=($stderr ne '') && ($stdout ne '');
-   }
+    if($stdout eq $expout) {
+      $ok=0;
+      $diag.="STDOUT:\n$stdout\nmatching:\n$expout\nnot expected";
+    }
+    if($stderr eq $experr) {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR:\n$stderr\nmatching:\n$experr\nnot expected";
+    }
+  } elsif(defined($expout)) {
+    $ok=($stdout ne $expout);
+    $diag="STDOUT:\n$stdout\nmatching:\n$expout\nnot expected";
+  } elsif(defined($experr)) {
+    $ok=($stderr ne $experr);
+    $diag="STDERR:\n$stderr\nmatching:\n$experr\nnot expected";
+  } else {
+    if($stdout eq '') {
+      $ok=0;
+      $diag="STDOUT:\n$stdout\nmatching:\n\nnot expected";
+    }
+    if($stderr eq '') {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR:\n$stderr\nmatching:\n\nnot expected";
+    }
+  }
 
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expout\nnot expected\n",
-               "STDERR:\n$stderr\nmatching:\n$experr\nnot expected" ) unless($ok);
+  $Test->ok( $ok, $description );
+  $Test->diag($diag);
+
+  return $ok;
+}
+
+=item B<output_like>
+
+=item B<output_unlike>
+
+  output_like  ( $coderef, $regex_stdout, $regex_stderr, 'description' );
+  output_unlike( $coderef, $regex_stdout, $regex_stderr, 'description' );
+
+output_like() and output_unlike() follow the same principles as output_is()
+and output_isnt() except they use a regular expression for matching.
+
+output_like() attempts to match $regex_stdout and $regex_stderr against
+STDOUT and STDERR produced by $coderef. The test passes if both match.
+
+  output_like(sub {print "foo"; print STDERR "bar";},qr/foo/,qr/bar/);
+
+The above test is successful.
+
+Like output_is(), setting either $regex_stdout or $regex_stderr to
+C<undef> ignores the output to that facility.
+
+  output_like(sub {print "foo"; print STDERR "bar";},qr/foo/,undef);
+
+is the same as
+
+  stdout_like(sub {print "foo"; print STDERR "bar";},qr/foo/);
+
+output_unlike() test pass if output from $coderef doesn't match 
+$regex_stdout and $regex_stderr.
+
+=back
+
+=cut
+
+sub output_like {
+  my $test=shift;
+  my $expout=shift;
+  my $experr=shift;
+  my $options=shift if(ref($_[0]));
+  my $description=shift;
+
+  my($stdout,$stderr)=output_from($test);
+
+  my $ok=1;
+
+  unless(my $regextest=_chkregex( 'output_like_STDERR' => $experr, 
+                                  'output_like_STDOUT' => $expout)) {
+    return $regextest;
+  }
+
+  my $diag;
+  if(defined($experr) && defined($expout)) {
+    unless($stdout =~ $expout) {
+      $ok=0;
+      $diag.="STDOUT:\n$stdout\ndoesn't match:\n$expout\nas expected";
+    }
+    unless($stderr =~ $experr) {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR:\n$stderr\ndoesn't match:\n$experr\nas expected";
+    }
+  } elsif(defined($expout)) {
+    $ok=($stdout =~ $expout);
+    $diag.="STDOUT:\n$stdout\ndoesn't match:\n$expout\nas expected";
+  } elsif(defined($experr)) {
+    $ok=($stderr =~ $experr);
+    $diag.="STDERR:\n$stderr\ndoesn't match:\n$experr\nas expected";
+  } else {
+    unless($stdout eq '') {
+      $ok=0;
+      $diag.="STDOUT is:\n$stdout\nnot:\n\nas expected";
+    }
+    unless($stderr eq '') {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR is:\n$stderr\nnot:\n\nas expected";
+    }
+  }
+
+  $Test->ok( $ok, $description );
+  $Test->diag( $diag );
+
+  return $ok;
+}
+
+sub output_unlike {
+  my $test=shift;
+  my $expout=shift;
+  my $experr=shift;
+  my $options=shift if(ref($_[0]));
+  my $description=shift;
+
+  my($stdout,$stderr)=output_from($test);
+
+  my $ok=1;
+
+  unless(my $regextest=_chkregex( 'output_unlike_STDERR' => $experr, 
+                                  'output_unlike_STDOUT' => $expout)) {
+    return $regextest;
+  }
+
+  my $diag;
+  if(defined($experr) && defined($expout)) {
+    if($stdout =~ $expout) {
+      $ok=0;
+      $diag.="STDOUT:\n$stdout\nmatches:\n$expout\nnot expected";
+    }
+    if($stderr =~ $experr) {
+      $diag.="\n" unless($ok);
+      $ok=0;
+      $diag.="STDERR:\n$stderr\nmatches:\n$experr\nnot expected";
+    }
+  } elsif(defined($expout)) {
+    $ok=($stdout !~ $expout);
+    $diag.="STDOUT:\n$stdout\nmatches:\n$expout\nnot expected";
+  } elsif(defined($experr)) {
+    $ok=($stderr !~ $experr);
+    $diag.="STDERR:\n$stderr\nmatches:\n$experr\nnot expected";
+  }
+
+  $Test->ok( $ok, $description );
+  $Test->diag( $diag );
 
   return $ok;
 }
@@ -482,6 +631,22 @@ sub output_from {
   untie *STDERR;
 
   return ($stdout,$stderr);
+}
+
+sub _chkregex {
+  my %regexs=@_;
+
+  foreach my $test (keys(%regexs)) {
+    next unless(defined($regexs{$test}));
+
+    my $usable_regex=$Test->maybe_regex( $regexs{$test} );
+    unless(defined( $usable_regex )) {
+      my $ok = $Test->ok( 0, $test );
+      $Test->diag("'$regexs{$test}' doesn't look much like a regex to me.");
+      return $ok;
+    }
+  }
+  return 1;
 }
 
 =head1 AUTHOR

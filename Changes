@@ -1,5 +1,15 @@
 Revision history for Test-Output
 
+0.04
+        Added methods: output_like, output_unlike
+        Moved output_from stdout_from and stderr_from out of @EXPORT
+          and into @EXPORT_OK.
+        Reworked diag messages for output_is and output_isnt to only show
+          the output that doesn't match.
+        replaced "comment" with "description"
+        More tests
+        Much refactoring
+
 0.03    02/16/2005
         Reworked entire POD. Thanks to rjbs for his suggestions.
         Additional POD fixes (date to data thanks to everyone who caught
