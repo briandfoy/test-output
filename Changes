@@ -1,5 +1,10 @@
 Revision history for Test-Output
 
+0.03
+        Additional POD fixes (date to data thanks to everyone who caught
+        that).
+        New methods: stderr_like, stderr_unlike
+
 0.02    02/12/2005
         New methods: output_isnt, stderr_inst, stdout_isnt
         Removed requirement for Filehandle
