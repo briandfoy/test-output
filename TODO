@@ -1,3 +1,4 @@
+Update diags of output* so that they only report STDOUT or STDERR differences
 Added parameter checking to all tests
   coderef or die
   expout or expstderr set or die
