@@ -36,6 +36,11 @@ our $VERSION = '0.03';
       print "Write out.\n";
       print STDERR "Error out.\n";
     }
+
+    stdout_is(\&writer,"Write out.\n",'Test STDOUT');
+
+    stderr_isnt(sub { print "This is STDOUT\n"; writer(); },
+              "No error out.\n",'Test STDERR');
     
     output_is(
               \&writer,
@@ -43,11 +48,6 @@ our $VERSION = '0.03';
               "Error out.\n",
               'Test STDOUT & STDERR'
             );
-
-    stdout_is(\&writer,"Write out.\n",'Test STDOUT');
-
-    stderr_isnt(sub { print "This is STDOUT\n"; writer(); },
-              "No error out.\n",'Test STDERR');
 
 =head1 DESCRIPTION
 
@@ -65,79 +65,17 @@ Test::Output ties STDOUT and STDERR using Test::Output::Tie.
 
 All functions are exported.
 
-=head2 output_is output_isnt
-
-   output_is  ( $coderef, $expected_stdout, $expected_stderr, 'comment' );
-   output_isnt( $coderef, $expected_stdout, $expected_stderr, 'comment' );
-
-output_is() compares the output of $coderef to 
-$expected_stdout and $expected_stderr, and fails if they do not match.
-output_isnt() being the opposite fails if they do match.
-
-In output_isnt() setting either $expected_stdout or $expected_stderr 
-to C<undef> ignores STDOUT or STEDERR during the test.
-
 =cut
-
-sub output_is {
-  my $test=shift;
-  my $expout=shift;
-  my $experr=shift;
-  my $options=shift if(ref($_[0]));
-  my $comment=shift;
-
-  my($stdout,$stderr)=_errandout($test);
-
-  my $ok;
-
-  if(defined($experr) && defined($expout)) {
-     $ok=($stdout eq $expout) && ($stderr eq $experr);
-   } elsif(defined($expout)) {
-     $ok=($stdout eq $expout) && ($stderr eq '');
-   } else {
-     $ok=($stderr eq $experr) && ($stdout eq '');
-   }
-
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expout\nas expected\n",
-               "STDERR is:\n$stderr\nnot:\n$experr\nas expected" ) unless($ok);
-
-  return $ok;
-}
-
-sub output_isnt {
-  my $test=shift;
-  my $expout=shift;
-  my $experr=shift;
-  my $options=shift if(ref($_[0]));
-  my $comment=shift;
-
-  my($stdout,$stderr)=_errandout($test);
-
-  my $ok;
-
-  if(defined($experr) && defined($expout)) {
-     $ok=($stdout ne $expout) && ($stderr ne $experr);
-   } elsif(defined($expout)) {
-     $ok=($stdout ne $expout) && ($stderr eq '');
-   } else {
-     $ok=($stderr ne $experr) && ($stdout eq '');
-   }
-
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expout\nnot expected\n",
-               "STDERR:\n$stderr\nmatching:\n$experr\nnot expected" ) unless($ok);
-
-  return $ok;
-}
 
 =head2 stdout_is stdout_isnt
 
    stdout_is  ( $coderef, $expected, 'comment' );
    stdout_isnt( $coderef, $expected, 'comment' );
 
-stdout_is() is similar to output_is() except that it only compares 
-$expected to STDOUT captured from $codref. stdout_isnt() is the opposite.
+stdout_is() captures output sent to STDOUT from $coderef and compares
+it against $expected. The test passes if equal.
+
+stdout_isnt() passes if STDOUT is not equal to $expected.
 
 =cut
 
@@ -178,9 +116,10 @@ sub stdout_isnt {
    stdout_like  ( $coderef, qr/$expected/, 'comment' );
    stdout_unlike( $coderef, qr/$expected/, 'comment' );
 
-stdout_like() is similar to output_like(), except that it only compares 
-the regex $expected to STDOUT captured from $codref. stdout_unlike() 
-being the opposite.
+stdout_like() captures the output sent to STDOUT from $coderef and compares
+it to the regex in $expected. The test passes if the regex matches.
+
+stdout_unlike() passes if STDOUT does not match the regex.
 
 =cut
 
@@ -235,9 +174,10 @@ sub stdout_unlike {
    stderr_is  ( $coderef, $expected, 'comment' );
    stderr_isnt( $coderef, $expected, 'comment' );
 
-stderr_is() is similar to output_is(), and stdout_is() except that it only
-compares $expected to STDERR captured from $codref. Again stderr_isnt() is
-the opposite.
+stderr_is() is similar to stdout_is, except that it captures STDERR. The
+test passes if STDERR from $coderef equals $expected.
+
+stderr_isnt() passes if STDERR is not equal to $expected.
 
 =cut
 
@@ -278,9 +218,11 @@ sub stderr_isnt {
    stderr_like  ( $coderef, qr/$expected/, 'comment' );
    stderr_unlike( $coderef, qr/$expected/, 'comment' );
 
-stderr_like() is similar to output_like(), and stdout_like() except that 
-it only compares the regex $expected to STDERR captured from $codref. 
-stderr_unlike() being the opposite.
+stderr_like() is similar to stdout_like() except that it compares the regex 
+$expected to STDERR captured from $codref. The test passes if the regex
+matches.
+
+stderr_unlike() passes if STDERR does not match the regex.
 
 =cut
 
@@ -326,6 +268,106 @@ sub stderr_unlike {
 
   $Test->ok( $ok, $comment );
   $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" ) unless($ok);
+
+  return $ok;
+}
+
+=head2 output_is output_isnt
+
+   output_is  ( $coderef, $expected_stdout, $expected_stderr, 'comment' );
+   output_isnt( $coderef, $expected_stdout, $expected_stderr, 'comment' );
+
+output_is() compares the output of $coderef to 
+$expected_stdout and $expected_stderr, and fails if they do not match.
+output_isnt() being the opposite fails if they do match.
+
+By setting $expected_stdout to C<undef>, output_is() and output_isnt()
+test that there is no output to STDOUT. $expected_stderr set to C<undef>
+tests that there is no output to STDERR.
+
+  output_is(sub {print "test";},'test',undef); # PASS
+  output_is(sub {print STDERR "test";},undef,'test'); # PASS
+
+  # FAIL
+  output_is(sub {print "test"; print STDERR "test";},'test',undef);
+
+  output_isnt(sub {print "test";},'TEST',undef); # PASS
+  output_isnt(sub {print STDERR "test";},undef,'TEST'); # PASS
+
+  # FAIL
+  output_isnt(sub {print "test"; print STDERR "test";},'TEST',undef);
+
+Setting both $expected_stdout and $expected_stderr to C<undef> with 
+output_is(), tests that there is no output to either STDOUT or STDERR. 
+
+  output_is(sub { return; },undef,undef); # PASS
+
+  # FAIL
+  output_is(sub {print "test";},undef,undef);
+
+Testing output_isnt(), with both $expected_stdout and $expected_stderr set to 
+C<undef>, passes if there is output to both STDERR and STDOUT.
+  
+  # PASS
+  output_isnt(sub {print "test"; print STDERR "test";},undef,undef) 
+
+  output_isnt(sub {print "test";},undef,undef) # FAIL
+  output_isnt(sub {print STDERR "test";},undef,undef) # FAIL
+
+=cut
+
+sub output_is {
+  my $test=shift;
+  my $expout=shift;
+  my $experr=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my($stdout,$stderr)=_errandout($test);
+
+  my $ok;
+
+  if(defined($experr) && defined($expout)) {
+     $ok=($stdout eq $expout) && ($stderr eq $experr);
+   } elsif(defined($expout)) {
+     $ok=($stdout eq $expout) && ($stderr eq '');
+   } elsif(defined($experr)) {
+     $ok=($stderr eq $experr) && ($stdout eq '');
+   } else {
+     $ok=($stderr eq '') && ($stdout eq '');
+   }
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expout\nas expected\n",
+               "STDERR is:\n$stderr\nnot:\n$experr\nas expected" ) unless($ok);
+
+  return $ok;
+}
+
+sub output_isnt {
+  my $test=shift;
+  my $expout=shift;
+  my $experr=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my($stdout,$stderr)=_errandout($test);
+
+  my $ok;
+
+  if(defined($experr) && defined($expout)) {
+     $ok=($stdout ne $expout) && ($stderr ne $experr);
+   } elsif(defined($expout)) {
+     $ok=($stdout ne $expout) && ($stderr eq '');
+   } elsif(defined($experr)) {
+     $ok=($stderr eq $experr) && ($stdout eq '');
+   } else {
+     $ok=($stderr ne '') && ($stdout ne '');
+   }
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDOUT:\n$stdout\nmatching:\n$expout\nnot expected\n",
+               "STDERR:\n$stderr\nmatching:\n$experr\nnot expected" ) unless($ok);
 
   return $ok;
 }
