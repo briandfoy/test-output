@@ -1,7 +1,6 @@
 use Test::More tests => 4;
 use Test::Output;
 use Test::Builder::Tester;
-use Test::Builder::Tester::Color;
 
 use strict;
 use warnings;
