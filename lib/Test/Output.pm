@@ -15,7 +15,7 @@ my $Test = Test::Builder->new;
 
 =head1 NAME
 
-Test::Output - The great new Test::Output!
+Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
@@ -23,23 +23,28 @@ Version 0.01
 
 =cut
 
-our $VERSION = '0.00_01';
+our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
+    use Test::More tests => 3;
     use Test::Output;
 
-    my $foo = Test::Output->new();
-    ...
+    sub writer {
+      print "Write out.\n";
+      print STDERR "Error out.\n";
+    }
+    
+    output_is(\&writer,"Write out.\n",'Test STDOUT');
+    output_is(\&writer,"Error out.\n",'Test STDERR');
 
-=head1 EXPORT
+    stderr_is(\&writer,"Error out.\n",'Test STDERR');
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+    stdout_is(\&writer,"Write out.\n",'Test STDOUT');
+
+=head1 DESCRIPTION
+
+
 
 =head1 FUNCTIONS
 
