@@ -76,8 +76,9 @@ check_test( sub {
               ok => 0,
               name => 'Testing STDOUT failure',
               diag => "STDOUT:\nTEST OUT\nmatching:\nTEST OUT\nnot expected\nSTDERR:\n\nmatching:\n\nnot expected\n",
-            }
+            },'STDOUT matches failure'
           );
+
 check_test( sub {
             output_isnt(sub {
                       print STDERR "TEST OUT"},
@@ -89,6 +90,6 @@ check_test( sub {
               ok => 0,
               name => 'Testing STDERR failure',
               diag => "STDOUT:\n\nmatching:\n\nnot expected\nSTDERR:\nTEST OUT\nmatching:\nTEST OUT\nnot expected\n",
-            }
+            },'STDERR matches failure'
           );
 
