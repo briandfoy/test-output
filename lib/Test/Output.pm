@@ -159,6 +159,17 @@ sub stdout_isnt {
   return $ok;
 }
 
+=head2 stdout_like stdout_unlike
+
+   stdout_like  ( $coderef, qr/$expected/, 'comment' );
+   stdout_unlike( $coderef, qr/$expected/, 'comment' );
+
+stdout_like() is similar to output_like(), except that it only compares 
+the regex $expected to STDOUT captured from $codref. stdout_unlike() 
+being the opposite.
+
+=cut
+
 sub stdout_like {
   my $test=shift;
   my $expected=shift;
@@ -204,6 +215,7 @@ sub stdout_unlike {
 
   return $ok;
 }
+
 =head2 stderr_is stderr_isnt
 
    stderr_is  ( $coderef, $expected, 'comment' );
