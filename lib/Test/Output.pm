@@ -8,9 +8,9 @@ use Test::Output::Tie;
 require Exporter;
 
 our @ISA=qw(Exporter);
-our @EXPORT=qw(output_is output_isnt 
-               stderr_is stderr_isnt stderr_like stderr_unlike
-               stdout_is stdout_isnt stdout_like stdout_unlike
+our @EXPORT=qw(output_from output_is output_isnt 
+               stderr_from stderr_is stderr_isnt stderr_like stderr_unlike
+               stdout_from stdout_is stdout_isnt stdout_like stdout_unlike
              );
 
 my $Test = Test::Builder->new;
@@ -39,8 +39,7 @@ our $VERSION = '0.03';
 
     stdout_is(\&writer,"Write out.\n",'Test STDOUT');
 
-    stderr_isnt(sub { print "This is STDOUT\n"; writer(); },
-              "No error out.\n",'Test STDERR');
+    stderr_isnt(\&writer,"No error out.\n",'Test STDERR');
     
     output_is(
               \&writer,
@@ -280,54 +279,42 @@ sub stderr_unlike {
 The output_is() function is a combination of the stdout_is() and stderr_is()
 functions. For example:
 
-  output_is(sub {print "test"; print STDERR "test";},'test','test');
+  output_is(sub {print "foo"; print STDERR "bar";},'foo','bar');
 
 is functionally equivalent to
 
-  stdout_is(sub {print "test";},'test') 
-    && stderr_is(sub {print STDERR "test";'test');
+  stdout_is(sub {print "foo";},'foo') 
+    && stderr_is(sub {print STDERR "bar";'bar');
 
 Unlike, stdout_is() and stderr_is() which ignore STDERR and STDOUT
 repectively, output_is() requires both STDOUT and STDERR to match in order
-to pass.
+to pass. Setting either $expected_stdout or $expected_stderr to C<undef>
+ignores STDOUT or STDERR respectively.
 
-MORE EDITTING REQUIRED BELOW
+  output_is(sub {print "foo"; print STDERR "bar";},'foo',undef);
 
-$expected_stdout and $expected_stderr, and fails if they do not match.
-output_isnt() being the opposite fails if they do match.
+is the same as
 
-By setting $expected_stdout to C<undef>, output_is() and output_isnt()
-test that there is no output to STDOUT. $expected_stderr set to C<undef>
-tests that there is no output to STDERR.
+  stdout_is(sub {print "foo";},'foo') 
 
-  output_is(sub {print "test";},'test',undef); # PASS
-  output_is(sub {print STDERR "test";},undef,'test'); # PASS
+output_isnt() provides the opposite function of output_is(). It is a 
+combination of stdout_isnt() and stderr_isnt().
 
-  # FAIL
-  output_is(sub {print "test"; print STDERR "test";},'test',undef);
+  output_isnt(sub {print "foo"; print STDERR "bar";},'bar','foo');
 
-  output_isnt(sub {print "test";},'TEST',undef); # PASS
-  output_isnt(sub {print STDERR "test";},undef,'TEST'); # PASS
+is functionally equivalent to
 
-  # FAIL
-  output_isnt(sub {print "test"; print STDERR "test";},'TEST',undef);
+  stdout_is(sub {print "foo";},'bar') 
+    && stderr_is(sub {print STDERR "bar";'foo');
 
-Setting both $expected_stdout and $expected_stderr to C<undef> with 
-output_is(), tests that there is no output to either STDOUT or STDERR. 
+As with output_is(), setting either $expected_stdout or $expected_stderr to
+C<undef> ignores the output to that facility.
 
-  output_is(sub { return; },undef,undef); # PASS
+  output_isnt(sub {print "foo"; print STDERR "bar";},undef,'foo',);
 
-  # FAIL
-  output_is(sub {print "test";},undef,undef);
+is the same as
 
-Testing output_isnt(), with both $expected_stdout and $expected_stderr set to 
-C<undef>, passes if there is output to both STDERR and STDOUT.
-  
-  # PASS
-  output_isnt(sub {print "test"; print STDERR "test";},undef,undef) 
-
-  output_isnt(sub {print "test";},undef,undef) # FAIL
-  output_isnt(sub {print STDERR "test";},undef,undef) # FAIL
+  stderr_is(sub {print STDERR "bar";},'foo') 
 
 =cut
 
@@ -345,9 +332,9 @@ sub output_is {
   if(defined($experr) && defined($expout)) {
      $ok=($stdout eq $expout) && ($stderr eq $experr);
    } elsif(defined($expout)) {
-     $ok=($stdout eq $expout) && ($stderr eq '');
+     $ok=($stdout eq $expout);
    } elsif(defined($experr)) {
-     $ok=($stderr eq $experr) && ($stdout eq '');
+     $ok=($stderr eq $experr);
    } else {
      $ok=($stderr eq '') && ($stdout eq '');
    }
@@ -373,9 +360,9 @@ sub output_isnt {
   if(defined($experr) && defined($expout)) {
      $ok=($stdout ne $expout) && ($stderr ne $experr);
    } elsif(defined($expout)) {
-     $ok=($stdout ne $expout) && ($stderr eq '');
+     $ok=($stdout ne $expout);
    } elsif(defined($experr)) {
-     $ok=($stderr eq $experr) && ($stdout eq '');
+     $ok=($stderr ne $experr);
    } else {
      $ok=($stderr ne '') && ($stdout ne '');
    }
