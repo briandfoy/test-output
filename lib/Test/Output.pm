@@ -51,8 +51,15 @@ our $VERSION = '0.02';
 
 =head1 DESCRIPTION
 
-Test::Output provides functions to test data sent to both STDOUT 
-and STDERR.
+Test::Output provides a simple interface for testing output send to STDOUT
+or STDERR. A number of different utilies are included to try and be as
+flexible as possible to the tester.
+         
+While Test::Output requires Test::Tester during installation, this
+requirement is only for it's own tests, not for what it's testing. One of
+the main ideas behind Test::Output is to make it as self contained as
+possible so it can be included with other's modules. As of this release
+the only requirement is to include Test::Output::Tie along with it.
 
 Test::Output ties STDOUT and STDERR using Test::Output::Tie. 
 
