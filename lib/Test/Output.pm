@@ -10,7 +10,7 @@ require Exporter;
 our @ISA=qw(Exporter);
 our @EXPORT=qw(output_is output_isnt 
                stderr_is stderr_isnt stderr_like stderr_unlike
-               stdout_is stdout_isnt
+               stdout_is stdout_isnt stdout_like stdout_unlike
              );
 
 my $Test = Test::Builder->new;
