@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Output;
 use Test::Builder::Tester;
 
@@ -8,6 +8,10 @@ use warnings;
 test_out('ok 1 - Testing STDOUT');
 output_is(sub {print "TEST OUT\n"},"TEST OUT\n",'Testing STDOUT');
 test_test('output_is handles STDOUT');
+
+test_out('ok 1 - Testing STDOUT printf');
+output_is(sub {printf("TEST OUT - %d\n",25)},"TEST OUT - 25\n",'Testing STDOUT printf');
+test_test('output_is handles STDOUT printf');
 
 test_out('ok 1 - Testing STDERR');
 output_is(sub {print STDERR "TEST OUT\n"},"TEST OUT\n",'Testing STDERR');

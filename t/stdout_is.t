@@ -1,4 +1,4 @@
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Output;
 use Test::Builder::Tester;
 use Test::Builder::Tester::Color;
@@ -9,6 +9,10 @@ use warnings;
 test_out('ok 1 - Testing STDOUT');
 stdout_is(sub {print "TEST OUT\n"},"TEST OUT\n",'Testing STDOUT');
 test_test('output_is handles STDOUT');
+
+test_out('ok 1 - Testing STDOUT printf');
+stdout_is(sub {printf("TEST OUT - %d\n",42)},"TEST OUT - 42\n",'Testing STDOUT printf');
+test_test('output_is handles STDOUT printf');
 
 test_out('not ok 1 - Testing STDOUT failure');
 test_err("\n#     Failed test ($0 at line ".line_num(+2).")");

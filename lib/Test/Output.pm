@@ -27,7 +27,7 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-    use Test::More tests => 3;
+    use Test::More tests => 4;
     use Test::Output;
 
     sub writer {
@@ -38,17 +38,26 @@ our $VERSION = '0.01';
     output_is(\&writer,"Write out.\n",'Test STDOUT');
     output_is(\&writer,"Error out.\n",'Test STDERR');
 
-    stderr_is(\&writer,"Error out.\n",'Test STDERR');
-
     stdout_is(\&writer,"Write out.\n",'Test STDOUT');
+
+    stderr_is(sub { print "This is STDOUT\n"; writer(); },
+              "Error out.\n",'Test STDERR');
 
 =head1 DESCRIPTION
 
+Test::Output provides functions to test date sent to both STDOUT 
+and STDERR.
 
+Test::Output ties STDOUT and STDERR using Test::Output::Tie. 
 
-=head1 FUNCTIONS
+All functions are exported.
 
 =head2 output_is
+
+   output_is( $coderef, $expected, 'comment' );
+
+output_is() compares $expected to the output produced by $coderef, 
+and fails if they do not match.
 
 =cut
 
@@ -69,27 +78,12 @@ sub output_is {
   return $ok;
 }
 
-=head2 stderr_is
-
-=cut
-
-sub stderr_is {
-  my $test=shift;
-  my $expected=shift;
-  my $options=shift if(ref($_[0]));
-  my $comment=shift;
-
-  my $stderr=_err($test);
-
-  my $ok=($stderr eq $expected);
-
-  $Test->ok( $ok, $comment );
-  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
-
-  return $ok;
-}
-
 =head2 stdout_is
+
+   stderr_is( $coderef, $expected, 'comment' );
+
+stdout_is() is similar to output_is() except that it only compares 
+$expected to STDOUT captured from $codref.
 
 =cut
 
@@ -109,27 +103,30 @@ sub stdout_is {
   return $ok;
 }
 
-=head1 AUTHOR
+=head2 stderr_is
 
-Shawn Sorichetti, C<< <ssoriche@coloredblocks.net> >>
+   stderr_is( $coderef, $expected, 'comment' );
 
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-test-output@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org>.  I will be notified, and then you'll automatically
-be notified of progress on your bug as I make changes.
-
-=head1 ACKNOWLEDGEMENTS
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2005 Shawn Sorichetti, All Rights Reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+stderr_is() is similar to output_is(), and stdout_is() except that it only
+compares $expected to STDERR captured from $codref.
 
 =cut
+
+sub stderr_is {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $comment=shift;
+
+  my $stderr=_err($test);
+
+  my $ok=($stderr eq $expected);
+
+  $Test->ok( $ok, $comment );
+  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
+
+  return $ok;
+}
 
 sub _errandout {
   my $test=shift;
@@ -150,6 +147,7 @@ sub _errandout {
 
   return ($stdout,$stderr);
 }
+
 
 sub _err {
   my $test=shift;
@@ -181,5 +179,29 @@ sub _out {
   return $stdout;
 }
 
-1; # End of Test::Output
 
+=head1 AUTHOR
+
+Shawn Sorichetti, C<< <ssoriche@coloredblocks.net> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-test-output@rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org>.  I will be notified, and then you'll automatically
+be notified of progress on your bug as I make changes.
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to chromatic whose TieOut.pm was the basis for capturing output.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2005 Shawn Sorichetti, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+1; # End of Test::Output
