@@ -1,5 +1,9 @@
 Revision history for Test-Output
 
+0.06    03/07/2005
+        Applied patch from David Wheeler to support code blocks within
+          tests as well as coderefs.
+
 0.05    03/04/2005
         Added chromatic's patch fixing diag messages printing even when
           tests pass.

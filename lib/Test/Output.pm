@@ -23,11 +23,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
@@ -687,6 +687,8 @@ be notified of progress on your bug as I make changes.
 Thanks to chromatic whose TieOut.pm was the basis for capturing output.
 
 Also thanks to rjbs for his help cleaning the documention
+
+Thanks to David Wheeler for providing code block support and tests.
 
 =head1 COPYRIGHT & LICENSE
 
