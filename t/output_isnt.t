@@ -1,4 +1,4 @@
-use Test::More tests => 32;
+use Test::More tests => 37;
 use Test::Tester;
 use Test::Output;
 
@@ -62,6 +62,19 @@ check_test( sub {
             },'STDOUT printf not equal success'
           );
 
+check_test( sub {
+            output_isnt(sub {
+                        printf STDERR ("TEST OUT - %d\n",25);
+                      },
+                      undef,
+                      "TEST OUT - 42\n",
+                      'Testing STDERR printf'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDERR printf',
+            },'STDERR printf not equal success'
+          );
 
 check_test( sub {
             output_isnt(sub {

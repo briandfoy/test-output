@@ -21,11 +21,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -46,8 +46,8 @@ our $VERSION = '0.02';
 
     stdout_is(\&writer,"Write out.\n",'Test STDOUT');
 
-    stderr_is(sub { print "This is STDOUT\n"; writer(); },
-              "Error out.\n",'Test STDERR');
+    stderr_isnt(sub { print "This is STDOUT\n"; writer(); },
+              "No error out.\n",'Test STDERR');
 
 =head1 DESCRIPTION
 
@@ -88,7 +88,15 @@ sub output_is {
 
   my($stdout,$stderr)=_errandout($test);
 
-  my $ok=($stdout eq $expout) && ($stderr eq $experr);
+  my $ok;
+
+  if(defined($experr) && defined($expout)) {
+     $ok=($stdout eq $expout) && ($stderr eq $experr);
+   } elsif(defined($expout)) {
+     $ok=($stdout eq $expout) && ($stderr eq '');
+   } else {
+     $ok=($stderr eq $experr) && ($stdout eq '');
+   }
 
   $Test->ok( $ok, $comment );
   $Test->diag( "STDOUT is:\n$stdout\nnot:\n$expout\nas expected\n",
@@ -106,15 +114,14 @@ sub output_isnt {
 
   my($stdout,$stderr)=_errandout($test);
 
-# my $ok=($stdout ne $expout) && ($stderr ne $experr);
   my $ok;
 
   if(defined($experr) && defined($expout)) {
      $ok=($stdout ne $expout) && ($stderr ne $experr);
    } elsif(defined($expout)) {
-     $ok=($stdout ne $expout);
+     $ok=($stdout ne $expout) && ($stderr eq '');
    } else {
-     $ok=($stdout ne $experr);
+     $ok=($stderr ne $experr) && ($stdout eq '');
    }
 
   $Test->ok( $ok, $comment );
