@@ -1,5 +1,9 @@
 Revision history for Test-Output
 
+0.02
+        Removed requirement for Filehandle
+        Removed errant leftover Test::Builder::Tester::Color from tests
+
 0.01    02/12/2005
         First version, released on an unsuspecting world.
 

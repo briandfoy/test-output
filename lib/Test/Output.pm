@@ -6,7 +6,6 @@ use strict;
 use Test::Builder;
 use Test::Output::Tie;
 require Exporter;
-use Filehandle;
 
 our @ISA=qw(Exporter);
 our @EXPORT=qw(output_is stderr_is stdout_is);
@@ -136,8 +135,8 @@ sub stderr_is {
 sub _errandout {
   my $test=shift;
 
-  STDOUT->autoflush(1);
-  STDERR->autoflush(1);
+  select((select(STDOUT), $|=1)[0]);
+  select((select(STDERR), $|=1)[0]);
   my $out=tie *STDOUT, 'Test::Output::Tie';
   my $err=tie *STDERR, 'Test::Output::Tie';
 
@@ -153,11 +152,10 @@ sub _errandout {
   return ($stdout,$stderr);
 }
 
-
 sub _err {
   my $test=shift;
 
-  STDERR->autoflush(1);
+  select((select(STDERR), $|=1)[0]);
   my $err=tie *STDERR, 'Test::Output::Tie';
 
   &$test;
@@ -172,7 +170,7 @@ sub _err {
 sub _out {
   my $test=shift;
 
-  STDOUT->autoflush(1);
+  select((select(STDOUT), $|=1)[0]);
   my $out=tie *STDOUT, 'Test::Output::Tie';
 
   &$test;
@@ -183,7 +181,6 @@ sub _out {
 
   return $stdout;
 }
-
 
 =head1 AUTHOR
 
