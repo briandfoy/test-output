@@ -85,7 +85,7 @@ sub stdout_is {
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
-  my $stdout=_out($test);
+  my $stdout=stdout_from($test);
 
   my $ok=($stdout eq $expected);
 
@@ -101,7 +101,7 @@ sub stdout_isnt {
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
-  my $stdout=_out($test);
+  my $stdout=stdout_from($test);
 
   my $ok=($stdout ne $expected);
 
@@ -136,7 +136,7 @@ sub stdout_like {
     return $ok;
   }
 
-  my $stdout=_out($test);
+  my $stdout=stdout_from($test);
 
   my $ok=($stdout =~ $expected);
 
@@ -159,7 +159,7 @@ sub stdout_unlike {
     return $ok;
   }
 
-  my $stdout=_out($test);
+  my $stdout=stdout_from($test);
 
   my $ok=($stdout !~ $expected);
 
@@ -187,7 +187,7 @@ sub stderr_is {
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
-  my $stderr=_err($test);
+  my $stderr=stderr_from($test);
 
   my $ok=($stderr eq $expected);
 
@@ -203,7 +203,7 @@ sub stderr_isnt {
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
-  my $stderr=_err($test);
+  my $stderr=stderr_from($test);
 
   my $ok=($stderr ne $expected);
 
@@ -239,7 +239,7 @@ sub stderr_like {
     return $ok;
   }
 
-  my $stderr=_err($test);
+  my $stderr=stderr_from($test);
 
   my $ok=($stderr =~ $expected);
 
@@ -262,7 +262,7 @@ sub stderr_unlike {
     return $ok;
   }
 
-  my $stderr=_err($test);
+  my $stderr=stderr_from($test);
 
   my $ok=($stderr !~ $expected);
 
@@ -277,7 +277,22 @@ sub stderr_unlike {
    output_is  ( $coderef, $expected_stdout, $expected_stderr, 'comment' );
    output_isnt( $coderef, $expected_stdout, $expected_stderr, 'comment' );
 
-output_is() compares the output of $coderef to 
+The output_is() function is a combination of the stdout_is() and stderr_is()
+functions. For example:
+
+  output_is(sub {print "test"; print STDERR "test";},'test','test');
+
+is functionally equivalent to
+
+  stdout_is(sub {print "test";},'test') 
+    && stderr_is(sub {print STDERR "test";'test');
+
+Unlike, stdout_is() and stderr_is() which ignore STDERR and STDOUT
+repectively, output_is() requires both STDOUT and STDERR to match in order
+to pass.
+
+MORE EDITTING REQUIRED BELOW
+
 $expected_stdout and $expected_stderr, and fails if they do not match.
 output_isnt() being the opposite fails if they do match.
 
@@ -323,7 +338,7 @@ sub output_is {
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
-  my($stdout,$stderr)=_errandout($test);
+  my($stdout,$stderr)=output_from($test);
 
   my $ok;
 
@@ -351,7 +366,7 @@ sub output_isnt {
   my $options=shift if(ref($_[0]));
   my $comment=shift;
 
-  my($stdout,$stderr)=_errandout($test);
+  my($stdout,$stderr)=output_from($test);
 
   my $ok;
 
@@ -372,7 +387,7 @@ sub output_isnt {
   return $ok;
 }
 
-sub _errandout {
+sub output_from {
   my $test=shift;
 
   select((select(STDOUT), $|=1)[0]);
@@ -392,7 +407,7 @@ sub _errandout {
   return ($stdout,$stderr);
 }
 
-sub _err {
+sub stderr_from {
   my $test=shift;
 
   select((select(STDERR), $|=1)[0]);
@@ -407,7 +422,7 @@ sub _err {
   return $stderr;
 }
 
-sub _out {
+sub stdout_from {
   my $test=shift;
 
   select((select(STDOUT), $|=1)[0]);
