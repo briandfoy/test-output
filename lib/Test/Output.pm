@@ -51,7 +51,7 @@ our $VERSION = '0.02';
 
 =head1 DESCRIPTION
 
-Test::Output provides functions to test date sent to both STDOUT 
+Test::Output provides functions to test data sent to both STDOUT 
 and STDERR.
 
 Test::Output ties STDOUT and STDERR using Test::Output::Tie. 
@@ -201,6 +201,17 @@ sub stderr_isnt {
 
   return $ok;
 }
+
+=head2 stderr_like stderr_unlike
+
+   stderr_like  ( $coderef, qr/$expected/, 'comment' );
+   stderr_unlike( $coderef, qr/$expected/, 'comment' );
+
+stderr_like() is similar to output_like(), and stdout_like() except that 
+it only compares the regex $expected to STDERR captured from $codref. 
+stderr_unlike() being the opposite.
+
+=cut
 
 sub stderr_like {
   my $test=shift;
