@@ -197,7 +197,7 @@ sub stderr_isnt {
   my $ok=($stderr ne $expected);
 
   $Test->ok( $ok, $comment );
-  $Test->diag( "STDERR is:\n$stderr\nnot:\n$expected\nas expected" ) unless($ok);
+  $Test->diag( "STDERR:\n$stderr\nmatches:\n$expected\nnot expected" ) unless($ok);
 
   return $ok;
 }
