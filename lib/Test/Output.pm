@@ -11,9 +11,10 @@ our @ISA=qw(Exporter);
 our @EXPORT=qw(output_is output_isnt output_like output_unlike
                stderr_is stderr_isnt stderr_like stderr_unlike
                stdout_is stdout_isnt stdout_like stdout_unlike
+               combined_is combined_isnt combined_like combined_unlike
              );
 
-our @EXPORT_OK=qw(output_from stderr_from stdout_from);
+our @EXPORT_OK=qw(output_from stderr_from stdout_from combined_from);
 
 my $Test = Test::Builder->new;
 
@@ -43,6 +44,12 @@ our $VERSION = '0.06';
 
     stderr_isnt(\&writer,"No error out.\n",'Test STDERR');
 
+    combined_is(
+                \&writer,
+                "Write out.\nError out.\n",
+                'Test STDOUT & STDERR combined'
+               );
+
     output_is(
               \&writer,
               "Write out.\n",
@@ -50,7 +57,7 @@ our $VERSION = '0.06';
               'Test STDOUT & STDERR'
             );
 
-    # Use bare blocks.
+   # Use bare blocks.
 
    stdout_is { print "test" } "test" "Test STDOUT";
    stderr_isnt { print "bad test" } "test" "Test STDERR";
@@ -299,6 +306,120 @@ sub stderr_unlike (&$;$$) {
   return $ok;
 }
 
+=head2 COMBINED OUTPUT
+
+=over 4
+
+=item B<combined_is>
+
+=item B<combined_isnt>
+
+   combined_is   ( $coderef, $expected, 'description' );
+   combined_is   {... } $expected, 'description';
+   combined_isnt ( $coderef, $expected, 'description' );
+   combined_isnt {... } $expected, 'description';
+
+combined_is() directs STDERR to STDOUT then captures STDOUT. This is
+equivalent to UNIXs 2>&1. The test passes if the combined STDOUT 
+and STDERR from $coderef equals $expected.
+
+combined_isnt() passes if combined STDOUT and STDERR are not equal 
+to $expected.
+
+=cut
+
+sub combined_is (&$;$$) {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $description=shift;
+
+  my $combined=combined_from($test);
+
+  my $ok=($combined eq $expected);
+
+  $Test->ok( $ok, $description ) ||
+   $Test->diag( "STDOUT & STDERR are:\n$combined\nnot:\n$expected\nas expected" );
+
+  return $ok;
+}
+
+sub combined_isnt (&$;$$) {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $description=shift;
+
+  my $combined=combined_from($test);
+
+  my $ok=($combined ne $expected);
+
+  $Test->ok( $ok, $description ) ||
+   $Test->diag( "STDOUT & STDERR:\n$combined\nmatching:\n$expected\nnot expected" );
+
+  return $ok;
+}
+
+=item B<combined_like>
+
+=item B<combined_unlike>
+
+   combined_like   ( $coderef, qr/$expected/, 'description' );
+   combined_like   { ...} qr/$expected/, 'description';
+   combined_unlike ( $coderef, qr/$expected/, 'description' );
+   combined_unlike { ...} qr/$expected/, 'description';
+
+combined_like() is similar to combined_is() except that it compares a regex
+($expected) to STDOUT and STDERR captured from $codref. The test passes if 
+the regex matches.
+
+combined_unlike() passes if the combined STDOUT and STDERR does not match 
+the regex.
+
+=back
+
+=cut
+
+sub combined_like (&$;$$) {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $description=shift;
+
+  unless(my $regextest=_chkregex('combined_like' => $expected)) {
+    return $regextest;
+  }
+
+  my $combined=combined_from($test);
+
+  my $ok=($combined =~ $expected);
+
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDOUT & STDERR:\n$combined\ndon't match:\n$expected\nas expected" );
+
+  return $ok;
+}
+
+sub combined_unlike (&$;$$) {
+  my $test=shift;
+  my $expected=shift;
+  my $options=shift if(ref($_[0]));
+  my $description=shift;
+
+  unless(my $regextest=_chkregex('combined_unlike' => $expected)) {
+    return $regextest;
+  }
+
+  my $combined=combined_from($test);
+
+  my $ok=($combined !~ $expected);
+
+  $Test->ok( $ok, $description ) ||
+    $Test->diag( "STDOUT & STDERR:\n$combined\nmatching:\n$expected\nnot expected" );
+
+  return $ok;
+}
+
 =head2 OUTPUT
 
 =over 4
@@ -451,9 +572,9 @@ sub output_isnt (&$$;$$) {
 =item B<output_unlike>
 
   output_like  ( $coderef, $regex_stdout, $regex_stderr, 'description' );
-  output_like     ... } $regex_stdout, $regex_stderr, 'description';
+  output_like  { ... } $regex_stdout, $regex_stderr, 'description';
   output_unlike( $coderef, $regex_stdout, $regex_stderr, 'description' );
-  output_unlike  { ... } $regex_stdout, $regex_stderr, 'description';
+  output_unlike { ... } $regex_stdout, $regex_stderr, 'description';
 
 output_like() and output_unlike() follow the same principles as output_is()
 and output_isnt() except they use a regular expression for matching.
@@ -652,6 +773,37 @@ sub output_from (&) {
   return ($stdout,$stderr);
 }
 
+=head2 combined_from
+
+  my $combined = combined_from($coderef);
+  my $combined = combined_from {...};
+
+combined_from() executes $coderef one time combines STDOUT and STDERR, and
+captures them. combined_from() is equivalent to using 2>&1 in UNIX.
+
+=cut
+
+sub combined_from (&) {
+  my $test=shift;
+
+  select((select(STDOUT), $|=1)[0]);
+  select((select(STDERR), $|=1)[0]);
+
+  open(STDERR,">&STDOUT");
+
+  my $out=tie *STDOUT, 'Test::Output::Tie';
+  tie *STDERR, 'Test::Output::Tie', $out;
+
+  &$test;
+  my $combined=$out->read;
+
+  undef $out;
+  untie *STDOUT;
+  untie *STDERR;
+
+  return ($combined);
+}
+
 sub _chkregex {
   my %regexs=@_;
 
@@ -689,6 +841,8 @@ Thanks to chromatic whose TieOut.pm was the basis for capturing output.
 Also thanks to rjbs for his help cleaning the documention
 
 Thanks to David Wheeler for providing code block support and tests.
+
+Thanks to Michael G Schwern for the solution to combining STDOUT and STDERR.
 
 =head1 COPYRIGHT & LICENSE
 

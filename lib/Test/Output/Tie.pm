@@ -1,5 +1,7 @@
 package Test::Output::Tie;
 
+our $VERSION='0.02';
+
 =head1 DESCRIPTION
 
 You are probably more interested in reading Test::Output.
@@ -15,8 +17,11 @@ The constructor for the class.
 =cut
 
 sub TIEHANDLE {
-    my $scalar = '';
-    bless( \$scalar, $_[0]);
+  my $class = shift;
+  my $scalar = '';
+  my $obj = shift || \$scalar; 
+
+  bless( $obj, $class);
 }
 
 =head2 PRINT

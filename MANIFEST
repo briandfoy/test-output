@@ -20,3 +20,7 @@ t/stdout_like.t
 t/stdout_unlike.t
 t/output_like.t
 t/output_unlike.t
+t/combined_is.t
+t/combined_isnt.t
+t/combined_like.t
+t/combined_unlike.t
