@@ -42,7 +42,7 @@ our $VERSION = '0.05';
     stdout_is(\&writer,"Write out.\n",'Test STDOUT');
 
     stderr_isnt(\&writer,"No error out.\n",'Test STDERR');
-    
+
     output_is(
               \&writer,
               "Write out.\n",
@@ -50,19 +50,26 @@ our $VERSION = '0.05';
               'Test STDOUT & STDERR'
             );
 
+    # Use bare blocks.
+
+   stdout_is { print "test" } "test" "Test STDOUT";
+   stderr_isnt { print "bad test" } "test" "Test STDERR";
+   output_is { print 'STDOUT'; print STDERR 'STDERR' }
+     "STDOUT", "STDERR", "Test output";
+
 =head1 DESCRIPTION
 
-Test::Output provides a simple interface for testing output send to STDOUT
+Test::Output provides a simple interface for testing output sent to STDOUT
 or STDERR. A number of different utilies are included to try and be as
 flexible as possible to the tester.
-         
+
 While Test::Output requires Test::Tester during installation, this
-requirement is only for it's own tests, not for what it's testing. One of
+requirement is only for its own tests, not for what it's testing. One of
 the main ideas behind Test::Output is to make it as self contained as
 possible so it can be included with other's modules. As of this release
 the only requirement is to include Test::Output::Tie along with it.
 
-Test::Output ties STDOUT and STDERR using Test::Output::Tie. 
+Test::Output ties STDOUT and STDERR using Test::Output::Tie.
 
 All functions are exported.
 
@@ -79,7 +86,9 @@ All functions are exported.
 =item B<stdout_isnt>
 
    stdout_is  ( $coderef, $expected, 'description' );
+   stdout_is    { ... } $expected, 'description';
    stdout_isnt( $coderef, $expected, 'description' );
+   stdout_isnt  { ... } $expected, 'description';
 
 stdout_is() captures output sent to STDOUT from $coderef and compares
 it against $expected. The test passes if equal.
@@ -88,7 +97,7 @@ stdout_isnt() passes if STDOUT is not equal to $expected.
 
 =cut
 
-sub stdout_is {
+sub stdout_is (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -104,7 +113,7 @@ sub stdout_is {
   return $ok;
 }
 
-sub stdout_isnt {
+sub stdout_isnt (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -125,7 +134,9 @@ sub stdout_isnt {
 =item B<stdout_unlike>
 
    stdout_like  ( $coderef, qr/$expected/, 'description' );
+   stdout_like    { ... } qr/$expected/, 'description';
    stdout_unlike( $coderef, qr/$expected/, 'description' );
+   stdout_unlike  { ... } qr/$expected/, 'description';
 
 stdout_like() captures the output sent to STDOUT from $coderef and compares
 it to the regex in $expected. The test passes if the regex matches.
@@ -136,7 +147,7 @@ stdout_unlike() passes if STDOUT does not match the regex.
 
 =cut
 
-sub stdout_like {
+sub stdout_like (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -156,7 +167,7 @@ sub stdout_like {
   return $ok;
 }
 
-sub stdout_unlike {
+sub stdout_unlike (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -186,7 +197,9 @@ sub stdout_unlike {
 =item B<stderr_isnt>
 
    stderr_is  ( $coderef, $expected, 'description' );
+   stderr_is    {... } $expected, 'description';
    stderr_isnt( $coderef, $expected, 'description' );
+   stderr_isnt  {... } $expected, 'description';
 
 stderr_is() is similar to stdout_is, except that it captures STDERR. The
 test passes if STDERR from $coderef equals $expected.
@@ -195,7 +208,7 @@ stderr_isnt() passes if STDERR is not equal to $expected.
 
 =cut
 
-sub stderr_is {
+sub stderr_is (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -211,7 +224,7 @@ sub stderr_is {
   return $ok;
 }
 
-sub stderr_isnt {
+sub stderr_isnt (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -232,9 +245,11 @@ sub stderr_isnt {
 =item B<stderr_unlike>
 
    stderr_like  ( $coderef, qr/$expected/, 'description' );
+   stderr_like   { ...} qr/$expected/, 'description';
    stderr_unlike( $coderef, qr/$expected/, 'description' );
+   stderr_unlike  { ...} qr/$expected/, 'description';
 
-stderr_like() is similar to stdout_like() except that it compares the regex 
+stderr_like() is similar to stdout_like() except that it compares the regex
 $expected to STDERR captured from $codref. The test passes if the regex
 matches.
 
@@ -244,7 +259,7 @@ stderr_unlike() passes if STDERR does not match the regex.
 
 =cut
 
-sub stderr_like {
+sub stderr_like (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -264,7 +279,7 @@ sub stderr_like {
   return $ok;
 }
 
-sub stderr_unlike {
+sub stderr_unlike (&$;$$) {
   my $test=shift;
   my $expected=shift;
   my $options=shift if(ref($_[0]));
@@ -293,7 +308,9 @@ sub stderr_unlike {
 =item B<output_isnt>
 
    output_is  ( $coderef, $expected_stdout, $expected_stderr, 'description' );
+   output_is    {... } $expected_stdout, $expected_stderr, 'description';
    output_isnt( $coderef, $expected_stdout, $expected_stderr, 'description' );
+   output_isnt  {... } $expected_stdout, $expected_stderr, 'description';
 
 The output_is() function is a combination of the stdout_is() and stderr_is()
 functions. For example:
@@ -339,7 +356,7 @@ is the same as
 
 =cut
 
-sub output_is {
+sub output_is (&$$;$$) {
   my $test=shift;
   my $expout=shift;
   my $experr=shift;
@@ -384,7 +401,7 @@ sub output_is {
   return $ok;
 }
 
-sub output_isnt {
+sub output_isnt (&$$;$$) {
   my $test=shift;
   my $expout=shift;
   my $experr=shift;
@@ -434,7 +451,9 @@ sub output_isnt {
 =item B<output_unlike>
 
   output_like  ( $coderef, $regex_stdout, $regex_stderr, 'description' );
+  output_like     ... } $regex_stdout, $regex_stderr, 'description';
   output_unlike( $coderef, $regex_stdout, $regex_stderr, 'description' );
+  output_unlike  { ... } $regex_stdout, $regex_stderr, 'description';
 
 output_like() and output_unlike() follow the same principles as output_is()
 and output_isnt() except they use a regular expression for matching.
@@ -462,7 +481,7 @@ $regex_stdout and $regex_stderr.
 
 =cut
 
-sub output_like {
+sub output_like (&$$;$$) {
   my $test=shift;
   my $expout=shift;
   my $experr=shift;
@@ -512,7 +531,7 @@ sub output_like {
   return $ok;
 }
 
-sub output_unlike {
+sub output_unlike (&$$;$$) {
   my $test=shift;
   my $expout=shift;
   my $experr=shift;
@@ -559,12 +578,13 @@ sub output_unlike {
 =head2 stdout_from
 
   my $stdout = stdout_from($coderef)
+  my $stdout = stdout_from { ... };
 
 stdout_from() executes $coderef and captures STDOUT.
 
 =cut
 
-sub stdout_from {
+sub stdout_from (&) {
   my $test=shift;
 
   select((select(STDOUT), $|=1)[0]);
@@ -582,12 +602,13 @@ sub stdout_from {
 =head2 stderr_from
 
   my $stderr = stderr_from($coderef)
+  my $stderr = stderr_from { ... };
 
 stderr_from() executes $coderef and captures STDERR.
 
 =cut
 
-sub stderr_from {
+sub stderr_from (&) {
   my $test=shift;
 
   select((select(STDERR), $|=1)[0]);
@@ -605,12 +626,13 @@ sub stderr_from {
 =head2 output_from
 
   my ($stdout, $stderr) = output_from($coderef)
+  my ($stdout, $stderr) = output_from {...};
 
 output_from() executes $coderef one time capturing both STDOUT and STDERR.
 
 =cut
 
-sub output_from {
+sub output_from (&) {
   my $test=shift;
 
   select((select(STDOUT), $|=1)[0]);
