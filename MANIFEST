@@ -14,4 +14,8 @@ t/stdout_is.t
 t/output_isnt.t
 t/stderr_isnt.t
 t/stdout_isnt.t
+t/stderr_like.t
+t/stderr_unlike.t
+t/stdout_like.t
+t/stdout_unlike.t
 
