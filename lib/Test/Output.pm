@@ -66,7 +66,15 @@ All functions are exported.
 
 =cut
 
-=head2 stdout_is stdout_isnt
+=head1 TESTS
+
+=head2 STDOUT
+
+=over 4
+
+=item B<stdout_is>
+
+=item B<stdout_isnt>
 
    stdout_is  ( $coderef, $expected, 'comment' );
    stdout_isnt( $coderef, $expected, 'comment' );
@@ -110,7 +118,9 @@ sub stdout_isnt {
   return $ok;
 }
 
-=head2 stdout_like stdout_unlike
+=item B<stdout_like>
+
+=item B<stdout_unlike>
 
    stdout_like  ( $coderef, qr/$expected/, 'comment' );
    stdout_unlike( $coderef, qr/$expected/, 'comment' );
@@ -119,6 +129,8 @@ stdout_like() captures the output sent to STDOUT from $coderef and compares
 it to the regex in $expected. The test passes if the regex matches.
 
 stdout_unlike() passes if STDOUT does not match the regex.
+
+=back
 
 =cut
 
@@ -168,7 +180,13 @@ sub stdout_unlike {
   return $ok;
 }
 
-=head2 stderr_is stderr_isnt
+=head2 STDERR
+
+=over 4
+
+=item B<stderr_is>
+
+=item B<stderr_isnt>
 
    stderr_is  ( $coderef, $expected, 'comment' );
    stderr_isnt( $coderef, $expected, 'comment' );
@@ -212,7 +230,9 @@ sub stderr_isnt {
   return $ok;
 }
 
-=head2 stderr_like stderr_unlike
+=item B<stderr_like>
+
+=item B<stderr_unlike>
 
    stderr_like  ( $coderef, qr/$expected/, 'comment' );
    stderr_unlike( $coderef, qr/$expected/, 'comment' );
@@ -222,6 +242,8 @@ $expected to STDERR captured from $codref. The test passes if the regex
 matches.
 
 stderr_unlike() passes if STDERR does not match the regex.
+
+=back
 
 =cut
 
@@ -271,7 +293,13 @@ sub stderr_unlike {
   return $ok;
 }
 
-=head2 output_is output_isnt
+=head2 OUTPUT
+
+=over 4
+
+=item B<output_is>
+
+=item B<output_isnt>
 
    output_is  ( $coderef, $expected_stdout, $expected_stderr, 'comment' );
    output_isnt( $coderef, $expected_stdout, $expected_stderr, 'comment' );
@@ -285,6 +313,8 @@ is functionally equivalent to
 
   stdout_is(sub {print "foo";},'foo') 
     && stderr_is(sub {print STDERR "bar";'bar');
+
+except that $coderef is only executed once.
 
 Unlike, stdout_is() and stderr_is() which ignore STDERR and STDOUT
 repectively, output_is() requires both STDOUT and STDERR to match in order
@@ -315,6 +345,8 @@ C<undef> ignores the output to that facility.
 is the same as
 
   stderr_is(sub {print STDERR "bar";},'foo') 
+
+=back
 
 =cut
 
@@ -374,6 +406,64 @@ sub output_isnt {
   return $ok;
 }
 
+=head1 FUNCTIONS
+
+=cut
+
+=head2 stdout_from
+
+  my $stdout = stdout_from($coderef)
+
+stdout_from() executes $coderef and captures STDOUT.
+
+=cut
+
+sub stdout_from {
+  my $test=shift;
+
+  select((select(STDOUT), $|=1)[0]);
+  my $out=tie *STDOUT, 'Test::Output::Tie';
+
+  &$test;
+  my $stdout=$out->read;
+
+  undef $out;
+  untie *STDOUT;
+
+  return $stdout;
+}
+
+=head2 stderr_from
+
+  my $stderr = stderr_from($coderef)
+
+stderr_from() executes $coderef and captures STDERR.
+
+=cut
+
+sub stderr_from {
+  my $test=shift;
+
+  select((select(STDERR), $|=1)[0]);
+  my $err=tie *STDERR, 'Test::Output::Tie';
+
+  &$test;
+  my $stderr=$err->read;
+
+  undef $err;
+  untie *STDERR;
+
+  return $stderr;
+}
+
+=head2 output_from
+
+  my ($stdout, $stderr) = output_from($coderef)
+
+output_from() executes $coderef one time capturing both STDOUT and STDERR.
+
+=cut
+
 sub output_from {
   my $test=shift;
 
@@ -394,36 +484,6 @@ sub output_from {
   return ($stdout,$stderr);
 }
 
-sub stderr_from {
-  my $test=shift;
-
-  select((select(STDERR), $|=1)[0]);
-  my $err=tie *STDERR, 'Test::Output::Tie';
-
-  &$test;
-  my $stderr=$err->read;
-
-  undef $err;
-  untie *STDERR;
-
-  return $stderr;
-}
-
-sub stdout_from {
-  my $test=shift;
-
-  select((select(STDOUT), $|=1)[0]);
-  my $out=tie *STDOUT, 'Test::Output::Tie';
-
-  &$test;
-  my $stdout=$out->read;
-
-  undef $out;
-  untie *STDOUT;
-
-  return $stdout;
-}
-
 =head1 AUTHOR
 
 Shawn Sorichetti, C<< <ssoriche@coloredblocks.net> >>
@@ -438,6 +498,8 @@ be notified of progress on your bug as I make changes.
 =head1 ACKNOWLEDGEMENTS
 
 Thanks to chromatic whose TieOut.pm was the basis for capturing output.
+
+Also thanks to rjbs for his help cleaning the documention
 
 =head1 COPYRIGHT & LICENSE
 
