@@ -1,5 +1,10 @@
 Revision history for Test-Output
 
+0.07    03/26/2005
+        Added methods: combined_is, combined_isnt, combined_like and
+          combined_unlike. This combine STDOUT and STDERR into one
+          filehandle and capture their output for testing.
+
 0.06    03/07/2005
         Applied patch from David Wheeler to support code blocks within
           tests as well as coderefs.
