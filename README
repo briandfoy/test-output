@@ -1,15 +1,14 @@
 Test-Output
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+Test-Output provides a simple interface for testing output send to STDOUT
+or STDERR. A number of different utilies are included to try and be as 
+flexible as possible to the tester.
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it get an idea of the modules uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+While Test::Output requires Test::Tester during installation, this 
+requirement is only for it's own tests, not for what it's testing. One of 
+the main ideas behind Test::Output is to make it as self contained as 
+possible so it can be included with other's modules. As of this release
+the only requirement is to include Test::Output::Tie along with it.
 
 INSTALLATION
 
@@ -22,8 +21,6 @@ To install this module, run the following commands:
 
 
 COPYRIGHT AND LICENCE
-
-Put the correct copyright and licence information here.
 
 Copyright (C) 2005 Shawn Sorichetti
 
