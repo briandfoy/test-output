@@ -5,10 +5,6 @@ Makefile.PL
 README
 lib/Test/Output.pm
 lib/Test/Output/Tie.pm
-t/lib/Test/Tester.pm
-t/lib/Test/Tester/CaptureRunner.pm
-t/lib/Test/Tester/Capture.pm
-t/lib/Test/Tester/Delegate.pm
 t/00.load.t
 t/pod-coverage.t
 t/pod.t
