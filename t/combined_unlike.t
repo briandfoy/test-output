@@ -1,5 +1,5 @@
-use Test::More tests => 42;
 use Test::Tester;
+use Test::More tests => 42;
 use Test::Output;
 
 use strict;

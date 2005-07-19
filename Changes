@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+0.08    07/19/2005
+        Supressed most warnings caused by newer versions of Test::Tester
+
 0.07    03/26/2005
         Added methods: combined_is, combined_isnt, combined_like and
           combined_unlike. This combine STDOUT and STDERR into one
