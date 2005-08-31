@@ -2,6 +2,9 @@ package Test::Output::Tie;
 
 our $VERSION='0.02';
 
+use strict;
+use warnings;
+
 =head1 DESCRIPTION
 
 You are probably more interested in reading Test::Output.
