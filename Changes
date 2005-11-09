@@ -1,5 +1,11 @@
 Revision history for Test-Output
 
+0.09    11/09/2005
+        New version of Test::Tester added a depth test which was causing
+          tests to fail. Thanks to neildp for the patch.
+        Fixed warning messages during perl Makefile.PL caused by Test::Tester
+          not being loaded first.
+
 0.08    07/19/2005
         Supressed most warnings caused by newer versions of Test::Tester
 
