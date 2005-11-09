@@ -1,5 +1,5 @@
 use Test::Tester;
-use Test::More tests => 132;
+use Test::More tests => 154;
 use Test::Output;
 
 use strict;
@@ -80,6 +80,7 @@ check_test( sub {
                     )
             },{
               ok => 0,
+              depth => 2,
               name => 'output_like_STDOUT',
               diag => "'OUT' doesn't look much like a regex to me.\n",
             },'STDOUT bad regex'
@@ -96,6 +97,7 @@ check_test( sub {
                     )
             },{
               ok => 0,
+              depth => 2,
               name => 'output_like_STDERR',
               diag => "'OUT' doesn't look much like a regex to me.\n",
             },'STDERR bad regex'
@@ -248,6 +250,7 @@ check_test( sub {
                       'Testing STDOUT and STDERR match'
             },{
               ok => 0,
+              depth => 2,
               name => 'output_like_STDOUT',
               diag => "'OUT' doesn't look much like a regex to me.\n",
             },'STDOUT bad regex'
@@ -263,6 +266,7 @@ check_test( sub {
                       'Testing STDOUT and STDERR match'
             },{
               ok => 0,
+              depth => 2,
               name => 'output_like_STDERR',
               diag => "'OUT' doesn't look much like a regex to me.\n",
             },'STDERR bad regex'

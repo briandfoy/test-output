@@ -1,5 +1,5 @@
 use Test::Tester;
-use Test::More tests => 36;
+use Test::More tests => 42;
 use Test::Output;
 
 use strict;
@@ -28,6 +28,7 @@ check_test( sub {
                     )
             },{
               ok => 0,
+              depth => 2,
               name => 'stderr_unlike',
               diag => "'OUT' doesn't look much like a regex to me.\n",
             },'STDERR matching success'
@@ -68,6 +69,7 @@ check_test( sub {
                       'Testing STDERR'
             },{
               ok => 0,
+              depth => 2,
               name => 'stderr_unlike',
               diag => "'OUT' doesn't look much like a regex to me.\n",
             },'STDERR matching success'
