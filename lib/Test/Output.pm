@@ -78,7 +78,7 @@ the only requirement is to include Test::Output::Tie along with it.
 
 Test::Output ties STDOUT and STDERR using Test::Output::Tie.
 
-All functions are exported.
+All tests are exported by default. All functions are exported on demand.
 
 =cut
 
