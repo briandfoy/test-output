@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+0.10
+        Migrated from Exporter to Sub::Exporter
+
 0.09    11/09/2005
         New version of Test::Tester added a depth test which was causing
           tests to fail. Thanks to neildp for the patch.
