@@ -1,6 +1,6 @@
 Revision history for Test-Output
 
-0.10
+0.10    07/18/2005
         Migrated from Exporter to Sub::Exporter
 
 0.09    11/09/2005
