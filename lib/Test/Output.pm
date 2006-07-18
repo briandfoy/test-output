@@ -25,6 +25,16 @@ use Sub::Exporter -setup => {
         stderr_is stderr_isnt stderr_like stderr_unlike
         )
     ],
+    output => [
+      qw(
+        output_is output_isnt output_like output_unlike
+        )
+    ],
+    combined => [
+      qw(
+        combined_is combined_isnt combined_like combined_unlike
+        )
+    ],
     functions => [
       qw(
         output_from stderr_from stdout_from combined_from
@@ -104,34 +114,9 @@ Test::Output ties STDOUT and STDERR using Test::Output::Tie.
 
 =cut
 
-=head1 EXPORTS
-
-By default, all tests are exported, however with the switch to L<Sub::Exporter>
-export groups are now available to beter limit imports;
-
-To import tests for STDOUT:
-
-  use Test::Output qw(:stdout);
-
-To import tests STDERR:
-
-  use Test::Output qw(:stderr);
-
-To import just the functions:
-
-  use Test::Output qw(:functions);
-
-And to import all tests:
-
-  use Test::Output;
-
-L<Sub::Exporter> allows for many other options, I encourage reading its
-documentation.
-
+=head1 TESTS
 
 =cut
-
-=head1 TESTS
 
 =head2 STDOUT
 
@@ -764,6 +749,58 @@ sub output_unlike (&$$;$$) {
 
   return $ok;
 }
+
+=head1 EXPORTS
+
+By default, all tests are exported, however with the switch to L<Sub::Exporter>
+export groups are now available to beter limit imports.
+
+To import tests for STDOUT:
+
+  use Test::Output qw(:stdout);
+
+To import tests STDERR:
+
+  use Test::Output qw(:stderr);
+
+To import just the functions:
+
+  use Test::Output qw(:functions);
+
+And to import all tests:
+
+  use Test::Output;
+
+The following is a list of group names and which functions are exported:
+
+=over 4
+
+=item stdout
+
+stdout_is stdout_isnt stdout_like stdout_unlike
+
+=item stderr
+
+stderr_is stderr_isnt stderr_like stderr_unlike
+
+=item output
+
+output_is output_isnt output_like output_unlike
+
+=item combined
+
+combined_is combined_isnt combined_like combined_unlike
+
+=item tests
+
+All of the above, this is the default when no options are given.
+
+=back
+
+L<Sub::Exporter> allows for many other options, I encourage reading its
+documentation.
+
+=cut
 
 =head1 FUNCTIONS
 
