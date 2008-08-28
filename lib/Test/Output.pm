@@ -842,6 +842,9 @@ stderr_from() executes $coderef and captures STDERR.
 sub stderr_from (&) {
   my $test = shift;
 
+  local $SIG{__WARN__} = sub { print STDERR @_ }
+    if $] < 5.008;
+  
   select( ( select(STDERR), $| = 1 )[0] );
   my $err = tie *STDERR, 'Test::Output::Tie';
 
