@@ -6,6 +6,7 @@ MANIFEST
 MANIFEST.SKIP
 META.yml			# Will be created by "make dist"
 README
+TODO
 t/00.load.t
 t/carp-5.6.t
 t/combined_is.t
