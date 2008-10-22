@@ -7,9 +7,8 @@ Makefile
 .svn
 CVS
 *.gz
-CPAN-*
+Test-Output-*
 cover_db
 .releaserc
 META.yml
-t/local/WRITEREPO/
 
