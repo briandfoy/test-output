@@ -4,7 +4,6 @@ lib/Test/Output/Tie.pm
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
-META.yml			# Will be created by "make dist"
 README
 TODO
 t/00.load.t
