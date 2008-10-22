@@ -60,11 +60,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
@@ -938,7 +938,14 @@ sub _chkregex {
 
 =head1 AUTHOR
 
-Shawn Sorichetti, C<< <ssoriche@coloredblocks.net> >>
+Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
+
+=head1 SOURCE AVAILABILITY
+ 
+This module is in Github:
+
+L<<a href="http://github.com/ssoriche/test-output/tree/master">http://github.com/ssoriche/test-output/tree/master</a>>
+
 
 =head1 BUGS
 
