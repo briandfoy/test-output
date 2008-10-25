@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+0.12 - Sat Oct 25 09:59:18 2008
+	Repacking to remove OS X extended attribute files that were causing tests to fail.
+
 0.11    10/21/2008
         Fixes for STDERR handling under Perl 5.6. Thanks to
         brian d foy for the patch with tests.
