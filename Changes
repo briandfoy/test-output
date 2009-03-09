@@ -1,5 +1,9 @@
 Revision history for Test-Output
 
+0.13 - Sun Mar  8 23:00:11 2009
+	* brian d foy (bdfoy@cpan.org) is the new maintainer
+	* Updated docs for source code location, license, etc
+
 0.12 - Sat Oct 25 09:59:18 2008
 	Repacking to remove OS X extended attribute files that were causing tests to fail.
 
