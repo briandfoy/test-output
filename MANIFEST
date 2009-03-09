@@ -1,11 +1,11 @@
 Changes
 lib/Test/Output.pm
 lib/Test/Output/Tie.pm
+LICENSE
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 README
-TODO
 t/00.load.t
 t/carp-5.6.t
 t/combined_is.t
@@ -26,3 +26,4 @@ t/stdout_is.t
 t/stdout_isnt.t
 t/stdout_like.t
 t/stdout_unlike.t
+TODO

@@ -32,3 +32,6 @@
 
 # Avoid Devel::Cover files.
 \bcover_db\b
+\.DS_Store
+Test-.*
+
