@@ -1,4 +1,5 @@
 package Test::Output;
+use vars qw($VERSION);
 
 use warnings;
 use strict;
@@ -64,7 +65,7 @@ Version 0.10
 
 =cut
 
-our $VERSION = '0.10';
+$VERSION = '0.12';
 
 =head1 SYNOPSIS
 
@@ -960,7 +961,9 @@ Thanks to Michael G Schwern for the solution to combining STDOUT and STDERR.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005 Shawn Sorichetti, All Rights Reserved.
+Currently maintained by brian d foy, C<bdfoy@cpan.org>.
+
+Copyright 2005-2008 Shawn Sorichetti, All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

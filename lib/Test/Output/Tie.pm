@@ -1,9 +1,14 @@
 package Test::Output::Tie;
+use vars qw($VERSION);
 
-our $VERSION='0.02';
+$VERSION='0.12';
 
 use strict;
 use warnings;
+
+=head1 NAME
+
+Test::Output::Tie - module used by Test::Output to tie STDIN and STDOUT
 
 =head1 DESCRIPTION
 
@@ -13,7 +18,11 @@ This module is used to tie STDOUT and STDERR in Test::Output.
 
 =cut
 
-=head2 TIEHANDLE
+=head2 Methods
+
+=over 4
+
+=item TIEHANDLE
 
 The constructor for the class.
 
@@ -27,7 +36,7 @@ sub TIEHANDLE {
   bless( $obj, $class);
 }
 
-=head2 PRINT
+=item PRINT
 
 This method is called each time STDERR or STDOUT are printed to.
 
@@ -38,7 +47,7 @@ sub PRINT {
     $$self .= join('', @_);
 }
 
-=head2 PRINTF
+=item PRINTF
 
 This method is called each time STDERR or STDOUT are printed to with C<printf>.
 
@@ -50,12 +59,13 @@ sub PRINTF {
     $$self .= sprintf $fmt, @_;
 }
 
-=head2 FILENO
+=item FILENO
 
 =cut
+
 sub FILENO {}
 
-=head2 read
+=item read
 
 This function is used to return all output printed to STDOUT or STDERR.
 
@@ -67,6 +77,18 @@ sub read {
     $$self = '';
     return $data;
 }
+
+=back
+
+=head1 COPYRIGHT & LICENSE
+
+Currently maintained by brian d foy, C<bdfoy@cpan.org>.
+
+Copyright 2005-2008 Shawn Sorichetti, All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
 
 =head1 ACKNOWLEDGMENTS
 
