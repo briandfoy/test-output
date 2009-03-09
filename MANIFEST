@@ -3,8 +3,9 @@ lib/Test/Output.pm
 lib/Test/Output/Tie.pm
 Makefile.PL
 MANIFEST
-META.yml			# Will be created by "make dist"
+MANIFEST.SKIP
 README
+TODO
 t/00.load.t
 t/carp-5.6.t
 t/combined_is.t

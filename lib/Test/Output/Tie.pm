@@ -80,6 +80,18 @@ sub read {
 
 =back
 
+=head1 AUTHOR
+
+Currently maintained by brian d foy, C<bdfoy@cpan.org>.
+
+Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
+
+=head1 SOURCE AVAILABILITY
+ 
+This module is in Github:
+
+	http://github.com/briandfoy/test-output/tree/master
+	
 =head1 COPYRIGHT & LICENSE
 
 Currently maintained by brian d foy, C<bdfoy@cpan.org>.

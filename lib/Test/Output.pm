@@ -61,7 +61,7 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.10
+Version 0.12
 
 =cut
 
@@ -939,7 +939,15 @@ sub _chkregex {
 
 =head1 AUTHOR
 
-Shawn Sorichetti, C<< <ssoriche@coloredblocks.net> >>
+Currently maintained by brian d foy, C<bdfoy@cpan.org>.
+
+Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
+
+=head1 SOURCE AVAILABILITY
+ 
+This module is in Github:
+
+	http://github.com/briandfoy/test-output/tree/master
 
 =head1 BUGS
 
@@ -960,8 +968,6 @@ Thanks to David Wheeler for providing code block support and tests.
 Thanks to Michael G Schwern for the solution to combining STDOUT and STDERR.
 
 =head1 COPYRIGHT & LICENSE
-
-Currently maintained by brian d foy, C<bdfoy@cpan.org>.
 
 Copyright 2005-2008 Shawn Sorichetti, All Rights Reserved.
 
