@@ -65,6 +65,12 @@ sub PRINTF {
 
 sub FILENO {}
 
+=item BINMODE
+
+=cut
+
+sub BINMODE {}
+
 =item read
 
 This function is used to return all output printed to STDOUT or STDERR.
