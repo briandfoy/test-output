@@ -7,6 +7,7 @@ MANIFEST
 MANIFEST.SKIP
 README
 t/00.load.t
+t/binmode.t
 t/carp-5.6.t
 t/combined_is.t
 t/combined_isnt.t
