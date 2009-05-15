@@ -61,11 +61,11 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =head1 VERSION
 
-Version 0.12
+Version 0.16
 
 =cut
 
-$VERSION = '0.13';
+$VERSION = '0.16';
 
 =head1 SYNOPSIS
 

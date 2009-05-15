@@ -12,7 +12,7 @@ WriteMakefile(
 	ABSTRACT_FROM => 'lib/Test/Output.pm',
 	PL_FILES      => {},
 	PREREQ_PM     => {
-		'Test::Tester'  => '0.1037',
+		'Test::Tester'  => '0.107',
 		'Test::More'    => '0',
 		'Sub::Exporter' => '0',
 		},
