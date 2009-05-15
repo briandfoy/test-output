@@ -15,6 +15,7 @@ WriteMakefile(
 		'Test::Tester'  => '0.107',
 		'Test::More'    => '0',
 		'Sub::Exporter' => '0',
+		'File::Temp'    => '0.21',
 		},
 
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
