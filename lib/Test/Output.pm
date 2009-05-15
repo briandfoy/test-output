@@ -912,9 +912,12 @@ sub combined_from (&) {
   my $combined = $out->read;
 
   undef $out;
+  {
+  no warnings;
   untie *STDOUT;
   untie *STDERR;
-
+  }
+  
   return ($combined);
 }
 
