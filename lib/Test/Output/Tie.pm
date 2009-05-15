@@ -1,7 +1,7 @@
 package Test::Output::Tie;
 use vars qw($VERSION);
 
-$VERSION='0.13';
+$VERSION='0.14';
 
 use strict;
 use warnings;
@@ -64,6 +64,12 @@ sub PRINTF {
 =cut
 
 sub FILENO {}
+
+=item BINMODE
+
+=cut
+
+sub BINMODE {}
 
 =item read
 
