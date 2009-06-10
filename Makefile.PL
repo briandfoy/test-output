@@ -1,4 +1,5 @@
-use 5.006; #for "use warnings"
+use 5.006;
+
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -18,15 +19,22 @@ WriteMakefile(
 		'Sub::Exporter' => '0',
 		'File::Temp'    => '0.21',
 		},
-        ($ExtUtils::MakeMaker::VERSION ge '6.48'? 
-         (MIN_PERL_VERSION => 5.006,
-          META_MERGE => {
-            resources => {
-              repository => 'http://github.com/briandfoy/test-output/tree/master',
-            },
-            keywords => ['testing','STDOUT','STDERR'],
-          },
-         ) : ()),
+
+	(
+	$ExtUtils::MakeMaker::VERSION ge '6.48' ? 
+		(
+		MIN_PERL_VERSION => 5.006,
+
+		META_MERGE       => {
+			resources => {
+		  		repository => 'git://github.com/briandfoy/test-output.git',
+				},
+			keywords => ['testing','STDOUT','STDERR'],
+	  		},
+	 	) 
+	 	: 
+	 	()
+	 ),
 
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 	clean => { FILES    => 'Test-Output-*' },
