@@ -8,7 +8,7 @@ use warnings;
 
 =head1 NAME
 
-Test::Output::Tie - module used by Test::Output to tie STDIN and STDOUT
+Test::Output::Tie - module used by Test::Output to tie STDERR and STDOUT
 
 =head1 DESCRIPTION
 
