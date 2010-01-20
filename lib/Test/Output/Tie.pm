@@ -44,7 +44,8 @@ This method is called each time STDERR or STDOUT are printed to.
 
 sub PRINT {
     my $self = shift;
-    $$self .= join('', @_);
+    $$self .= join(':::s', @_);
+    $$self .= defined $\ ? $\ : ''; # for say()
 }
 
 =item PRINTF
