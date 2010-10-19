@@ -1,5 +1,9 @@
 Revision history for Test-Output
 
+0.16_02 - Tue Oct 19 03:26:14 2010
+	* Update tests with hardcoded regex stringification for 
+	Perl's new (?^:) stuff
+
 0.16_01 - Tue Jun  9 22:58:58 2009
 	* Added META_MERGE features from chorny
 
