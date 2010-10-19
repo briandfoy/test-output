@@ -5,11 +5,14 @@ use Test::Output;
 use strict;
 use warnings;
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+{
+my $regex = qr/out/;
 check_test( sub {
             stderr_unlike(sub {
                         print STDERR "TEST OUT\n";
                       },
-                      qr/out/,
+                      $regex,
                       'Testing STDERR'
                     )
             },{
@@ -18,7 +21,9 @@ check_test( sub {
               diag => '',
             },'STDERR matching success'
           );
+}
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 check_test( sub {
             stderr_unlike(sub {
                         print STDERR "TEST OUT\n";
@@ -34,25 +39,32 @@ check_test( sub {
             },'STDERR matching success'
           );
 
+
+
+{ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+my $regex = qr/OUT/;
 check_test( sub {
             stderr_unlike(sub {
                         print STDERR "TEST OUT\n";
                       },
-                      qr/OUT/,
+                      $regex,
                       'Testing STDERR'
                     )
             },{
               ok => 0,
               name => 'Testing STDERR',
-              diag => "STDERR:\nTEST OUT\n\nmatches:\n(?-xism:OUT)\nnot expected\n",
+              diag => "STDERR:\nTEST OUT\n\nmatches:\n$regex\nnot expected\n",
             },'STDERR not matching failure'
           );
+}
 
+{ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+my $regex = qr/out/;
 check_test( sub {
             stderr_unlike {
                         print STDERR "TEST OUT\n";
                       }
-                      qr/out/,
+                      $regex,
                       'Testing STDERR'
             },{
               ok => 1,
@@ -60,7 +72,9 @@ check_test( sub {
               diag => '',
             },'STDERR matching success'
           );
+}
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 check_test( sub {
             stderr_unlike {
                         print STDERR "TEST OUT\n";
@@ -75,16 +89,18 @@ check_test( sub {
             },'STDERR matching success'
           );
 
+{ # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+my $regex = qr/OUT/;
 check_test( sub {
             stderr_unlike {
                         print STDERR "TEST OUT\n";
                       }
-                      qr/OUT/,
+                      $regex,
                       'Testing STDERR'
             },{
               ok => 0,
               name => 'Testing STDERR',
-              diag => "STDERR:\nTEST OUT\n\nmatches:\n(?-xism:OUT)\nnot expected\n",
+              diag => "STDERR:\nTEST OUT\n\nmatches:\n$regex\nnot expected\n",
             },'STDERR not matching failure'
           );
-
+}

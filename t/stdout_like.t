@@ -5,11 +5,14 @@ use Test::Output;
 use strict;
 use warnings;
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+{
+my $regex = qr/OUT/i;
 check_test( sub {
             stdout_like(sub {
                         print "TEST OUT\n";
                       },
-                      qr/OUT/i,
+                      $regex,
                       'Testing STDOUT'
                     )
             },{
@@ -18,7 +21,9 @@ check_test( sub {
               diag => '',
             },'STDOUT matching success'
           );
+}
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 check_test( sub {
             stdout_like(sub {
                         print "TEST OUT\n";
@@ -34,25 +39,32 @@ check_test( sub {
             },'bad regex'
           );
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+{
+my $regex = qr/out/;
 check_test( sub {
             stdout_like(sub {
                         print "TEST OUT\n";
                       },
-                      qr/out/,
+                      $regex,
                       'Testing STDOUT'
                     )
             },{
               ok => 0,
               name => 'Testing STDOUT',
-              diag => "STDOUT:\nTEST OUT\n\ndoesn't match:\n(?-xism:out)\nas expected\n",
+              diag => "STDOUT:\nTEST OUT\n\ndoesn't match:\n$regex\nas expected\n",
             },'STDOUT not matching failure'
           );
+}
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+{
+my $regex = qr/OUT/i;
 check_test( sub {
             stdout_like {
                         print "TEST OUT\n";
                       }
-                      qr/OUT/i,
+                      $regex,
                       'Testing STDOUT'
             },{
               ok => 1,
@@ -60,7 +72,10 @@ check_test( sub {
               diag => '',
             },'STDOUT matching success'
           );
+}
 
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 check_test( sub {
             stdout_like {
                         print "TEST OUT\n";
@@ -75,16 +90,19 @@ check_test( sub {
             },'bad regex'
           );
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+{
+my $regex = qr/out/;
 check_test( sub {
             stdout_like {
                         print "TEST OUT\n";
                       }
-                      qr/out/,
+                      $regex,
                       'Testing STDOUT'
             },{
               ok => 0,
               name => 'Testing STDOUT',
-              diag => "STDOUT:\nTEST OUT\n\ndoesn't match:\n(?-xism:out)\nas expected\n",
+              diag => "STDOUT:\nTEST OUT\n\ndoesn't match:\n$regex\nas expected\n",
             },'STDOUT not matching failure'
           );
-
+}
