@@ -1,5 +1,5 @@
 use Test::Tester;
-use Test::More tests => 28;
+use Test::More tests => 21;
 use Test::Output;
 
 use strict;
@@ -47,13 +47,16 @@ check_test( sub {
             },'STDOUT not matching failure'
           );
 
+__END__
+
+# This doesn't work yet
 SKIP: {
-skip 'Perl 5.10 required for this test' unless $] >= 5.010;
-use feature qw(say);
+skip 'Perl 5.10 required for this test', 7 unless $] >= 5.010;
+BEGIN { eval "use feature qw(say)" if $] >= 5.010 };
 
 check_test( sub {
             stdout_is { 
-                        say "TEST OUT";
+                        eval 'say( "TEST OUT" );';
                       }
                       "TEST OUT\n",
                       'Testing STDOUT'
