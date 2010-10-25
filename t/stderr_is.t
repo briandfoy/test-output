@@ -1,5 +1,5 @@
 use Test::Tester;
-use Test::More tests => 28;
+use Test::More tests => 42;
 use Test::Output;
 
 use strict;
@@ -8,6 +8,35 @@ use warnings;
 check_test( sub {
             stderr_is(sub {
                         print STDERR "TEST OUT\n";
+                      },
+                      "TEST OUT\n",
+                      'Testing STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDERR',
+              diag => '',
+            },'STDERR matching success'
+          );
+
+check_test( sub {
+            stderr_is(sub {
+                        print STDERR "TEST", " ", "OUT", "\n";
+                      },
+                      "TEST OUT\n",
+                      'Testing STDERR'
+                    )
+            },{
+              ok => 1,
+              name => 'Testing STDERR',
+              diag => '',
+            },'STDERR matching success'
+          );
+
+check_test( sub {
+            stderr_is(sub {
+                        local $, = " ";
+                        print STDERR "TEST", "OUT\n";
                       },
                       "TEST OUT\n",
                       'Testing STDERR'
