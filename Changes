@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+0.16_03 - Mon Oct 25 23:10:41 2010
+	* Fix cat-o with handling $,
+
 0.16_02 - Tue Oct 19 03:26:14 2010
 	* Update tests with hardcoded regex stringification for 
 	Perl's new (?^:) stuff
