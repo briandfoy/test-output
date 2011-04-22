@@ -1,7 +1,7 @@
 package Test::Output::Tie;
 use vars qw($VERSION);
 
-$VERSION='0.16_03';
+$VERSION='1.01';
 
 use strict;
 use warnings;
