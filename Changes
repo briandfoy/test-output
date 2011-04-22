@@ -1,5 +1,9 @@
 Revision history for Test-Output
 
+1.01 - Fri Apr 22 07:58:19 2011
+	* Bump to a full release. This fixes the tests that failed
+	in the new 5.14 regex stringification
+
 0.16_03 - Mon Oct 25 23:10:41 2010
 	* Fix cat-o with handling $,
 
