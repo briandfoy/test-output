@@ -1,5 +1,10 @@
 Revision history for Test-Output
 
+1.01_01 - Mon May 14 16:05:22 2012
+	* David Golden re-did everything with Capture::Tiny
+	to get around the odd output paths that we coudn't
+	handle with a tie.
+
 1.01 - Fri Apr 22 07:58:19 2011
 	* Bump to a full release. This fixes the tests that failed
 	in the new 5.14 regex stringification
