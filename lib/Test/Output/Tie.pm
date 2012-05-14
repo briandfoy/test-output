@@ -8,13 +8,15 @@ use warnings;
 
 =head1 NAME
 
-Test::Output::Tie - module used by Test::Output to tie STDERR and STDOUT
+Test::Output::Tie - module used by Test::Output to tie STDERR and STDOUT (DEPRECATED)
 
 =head1 DESCRIPTION
 
 You are probably more interested in reading Test::Output.
 
-This module is used to tie STDOUT and STDERR in Test::Output.
+This module was used historically to tie STDOUT and STDERR in Test::Output.  It
+is now deprecated and included only for backwards compatibility should someone
+be using it for other purposes.
 
 =cut
 
