@@ -5,7 +5,7 @@ use warnings;
 use strict;
 
 use Test::Builder;
-use Test::Output::Tie;
+use Capture::Tiny qw/capture capture_stdout capture_stderr capture_merged/;
 use Sub::Exporter -setup => {
   exports => [
     qw(output_is output_isnt output_like output_unlike
@@ -111,7 +111,9 @@ Originally this module was designed not to have external requirements,
 however, the features provided by L<Sub::Exporter> over what L<Exporter>
 provides is just to great to pass up.
 
-Test::Output ties STDOUT and STDERR using Test::Output::Tie.
+Likewise, Capture::Tiny provides a much more robust capture mechanism without
+than the original Test::Output::Tie.  (Test::Output::Tie is deprecated, but
+included for backwards compatibility.)
 
 =cut
 
@@ -819,14 +821,10 @@ stdout_from() executes $coderef and captures STDOUT.
 sub stdout_from (&) {
   my $test = shift;
 
-  select( ( select(STDOUT), $| = 1 )[0] );
-  my $out = tie *STDOUT, 'Test::Output::Tie';
-
-  &$test;
-  my $stdout = $out->read;
-
-  undef $out;
-  untie *STDOUT;
+  my $stdout = capture_stdout {
+    select( ( select(STDOUT), $| = 1 )[0] );
+    $test->()
+  };
 
   return $stdout;
 }
@@ -843,17 +841,14 @@ stderr_from() executes $coderef and captures STDERR.
 sub stderr_from (&) {
   my $test = shift;
 
+  # XXX why is this here and not in output_from or combined_from -- xdg, 2012-05-13
   local $SIG{__WARN__} = sub { print STDERR @_ }
     if $] < 5.008;
-  
-  select( ( select(STDERR), $| = 1 )[0] );
-  my $err = tie *STDERR, 'Test::Output::Tie';
 
-  &$test;
-  my $stderr = $err->read;
-
-  undef $err;
-  untie *STDERR;
+  my $stderr = capture_stderr {
+    select( ( select(STDERR), $| = 1 )[0] );
+    $test->()
+  };
 
   return $stderr;
 }
@@ -870,19 +865,11 @@ output_from() executes $coderef one time capturing both STDOUT and STDERR.
 sub output_from (&) {
   my $test = shift;
 
-  select( ( select(STDOUT), $| = 1 )[0] );
-  select( ( select(STDERR), $| = 1 )[0] );
-  my $out = tie *STDOUT, 'Test::Output::Tie';
-  my $err = tie *STDERR, 'Test::Output::Tie';
-
-  &$test;
-  my $stdout = $out->read;
-  my $stderr = $err->read;
-
-  undef $out;
-  undef $err;
-  untie *STDOUT;
-  untie *STDERR;
+  my ($stdout, $stderr) = capture {
+    select( ( select(STDOUT), $| = 1 )[0] );
+    select( ( select(STDERR), $| = 1 )[0] );
+    $test->();
+  };
 
   return ( $stdout, $stderr );
 }
@@ -900,25 +887,13 @@ captures them. combined_from() is equivalent to using 2>&1 in UNIX.
 sub combined_from (&) {
   my $test = shift;
 
-  select( ( select(STDOUT), $| = 1 )[0] );
-  select( ( select(STDERR), $| = 1 )[0] );
+  my $combined = capture_merged {
+    select( ( select(STDOUT), $| = 1 )[0] );
+    select( ( select(STDERR), $| = 1 )[0] );
+    $test->();
+  };
 
-  open( STDERR, ">&STDOUT" );
-
-  my $out = tie *STDOUT, 'Test::Output::Tie';
-  tie *STDERR, 'Test::Output::Tie', $out;
-
-  &$test;
-  my $combined = $out->read;
-
-  undef $out;
-  {
-  no warnings;
-  untie *STDOUT;
-  untie *STDERR;
-  }
-  
-  return ($combined);
+  return $combined;
 }
 
 sub _chkregex {
