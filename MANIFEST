@@ -5,6 +5,7 @@ LICENSE
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
+MYMETA.json
 README
 t/00.load.t
 t/binmode.t
