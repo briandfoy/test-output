@@ -1,5 +1,9 @@
 Revision history for Test-Output
 
+1.01_02 - Thu Jul 19 06:18:35 2012
+	* Remove the ::Tie stuff. It should be fully Capture::Tiny 
+	now.
+
 1.01_01 - Mon May 14 16:05:22 2012
 	* David Golden re-did everything with Capture::Tiny
 	to get around the odd output paths that we coudn't
