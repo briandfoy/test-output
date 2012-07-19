@@ -1,6 +1,5 @@
 Changes
 lib/Test/Output.pm
-lib/Test/Output/Tie.pm
 LICENSE
 Makefile.PL
 MANIFEST
