@@ -87,6 +87,12 @@ sub read {
     return $data;
 }
 
+=item CLOSE
+
+=cut
+
+sub CLOSE {}
+
 =back
 
 =head1 AUTHOR
