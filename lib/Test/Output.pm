@@ -65,7 +65,7 @@ Version 0.16
 
 =cut
 
-$VERSION = '1.01_03';
+$VERSION = '1.02';
 
 =head1 SYNOPSIS
 
@@ -947,7 +947,7 @@ Thanks to Michael G Schwern for the solution to combining STDOUT and STDERR.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2008 Shawn Sorichetti, All Rights Reserved.
+Copyright 2005-2013 Shawn Sorichetti, All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
