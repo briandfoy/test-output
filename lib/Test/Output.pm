@@ -486,7 +486,7 @@ is functionally equivalent to
 except that $coderef is only executed once.
 
 Unlike, stdout_is() and stderr_is() which ignore STDERR and STDOUT
-repectively, output_is() requires both STDOUT and STDERR to match in order
+respectively, output_is() requires both STDOUT and STDERR to match in order
 to pass. Setting either $expected_stdout or $expected_stderr to C<undef>
 ignores STDOUT or STDERR respectively.
 
@@ -938,7 +938,7 @@ be notified of progress on your bug as I make changes.
 
 Thanks to chromatic whose TieOut.pm was the basis for capturing output.
 
-Also thanks to rjbs for his help cleaning the documention, and pushing me to
+Also thanks to rjbs for his help cleaning the documentation, and pushing me to
 L<Sub::Exporter>.
 
 Thanks to David Wheeler for providing code block support and tests.
