@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+1.02 - Mon Jul  8 21:15:30 2013
+	* Bump to stable release
+
 1.01_02 - Thu Jul 19 06:18:35 2012
 	* Remove the ::Tie stuff. It should be fully Capture::Tiny 
 	now.
