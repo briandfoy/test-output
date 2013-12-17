@@ -65,7 +65,7 @@ Version 0.16
 
 =cut
 
-$VERSION = '1.02';
+$VERSION = '1.02_01';
 
 =head1 SYNOPSIS
 
@@ -112,8 +112,7 @@ however, the features provided by L<Sub::Exporter> over what L<Exporter>
 provides is just to great to pass up.
 
 Likewise, Capture::Tiny provides a much more robust capture mechanism without
-than the original Test::Output::Tie.  (Test::Output::Tie is deprecated, but
-included for backwards compatibility.)
+than the original Test::Output::Tie.
 
 =cut
 
@@ -241,6 +240,7 @@ sub stdout_unlike (&$;$$) {
 
    stderr_is  ( $coderef, $expected, 'description' );
    stderr_is    {... } $expected, 'description';
+
    stderr_isnt( $coderef, $expected, 'description' );
    stderr_isnt  {... } $expected, 'description';
 
