@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+1.02_01 - Tue Dec 17 12:39:15 2013
+	* Get rid of MYMETA
+
 1.02 - Mon Jul  8 21:15:30 2013
 	* Bump to stable release
 
