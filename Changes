@@ -1,5 +1,8 @@
 Revision history for Test-Output
 
+1.03 - Fri Jan  3 12:19:35 2014
+	* Get rid of MYMETA
+
 1.02_01 - Tue Dec 17 12:39:15 2013
 	* Get rid of MYMETA
 
