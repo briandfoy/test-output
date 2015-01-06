@@ -1,42 +1,42 @@
 Revision history for Perl module Test::Output
 
-1.03 - Fri Jan  3 12:19:35 2014
+1.03 - 2014-01-03
 	* Get rid of MYMETA
 
-1.02_01 - Tue Dec 17 12:39:15 2013
+1.02_01 - 2013-12-17
 	* Get rid of MYMETA
 
-1.02 - Mon Jul  8 21:15:30 2013
+1.02 - 2013-07-08
 	* Bump to stable release
 
-1.01_02 - Thu Jul 19 06:18:35 2012
+1.01_02 - 2012-07-19
 	* Remove the ::Tie stuff. It should be fully Capture::Tiny
 	now.
 
-1.01_01 - Mon May 14 16:05:22 2012
+1.01_01 - 2012-05-14
 	* David Golden re-did everything with Capture::Tiny
 	to get around the odd output paths that we coudn't
 	handle with a tie.
 
-1.01 - Fri Apr 22 07:58:19 2011
+1.01 - 2011-04-22
 	* Bump to a full release. This fixes the tests that failed
 	in the new 5.14 regex stringification
 
-0.16_03 - Mon Oct 25 23:10:41 2010
+0.16_03 - 2010-10-25
 	* Fix cat-o with handling $,
 
-0.16_02 - Tue Oct 19 03:26:14 2010
+0.16_02 - 2010-10-19
 	* Update tests with hardcoded regex stringification for
 	Perl's new (?^:) stuff
 
-0.16_01 - Tue Jun  9 22:58:58 2009
+0.16_01 - 2009-06-09
 	* Added META_MERGE features from chorny
 
-0.13 - Sun Mar  8 23:00:11 2009
+0.13 - 2009-03-08
 	* brian d foy (bdfoy@cpan.org) is the new maintainer
 	* Updated docs for source code location, license, etc
 
-0.12 - Sat Oct 25 09:59:18 2008
+0.12 - 2008-10-25
 	* Repacking to remove OS X extended attribute files that were causing tests to fail.
 
 0.11    2008-21-10
