@@ -1,42 +1,73 @@
-use 5.006;
-
+require 5.008;
 use strict;
 use warnings;
-use ExtUtils::MakeMaker;
 
 eval "use Test::Tester";
 
-WriteMakefile(
-	NAME          => 'Test::Output',
-	AUTHOR        => 'brian d foy <bdfoy@cpan.org>',
-	VERSION_FROM  => 'lib/Test/Output.pm',
-	LICENSE       => 'perl',
-	ABSTRACT_FROM => 'lib/Test/Output.pm',
-	PL_FILES      => {},
-	PREREQ_PM     => {
+my $github    = 'https://github.com/briandfoy/test-output';
+my $main_file = 'lib/Test/Output.pm';
+
+my %WriteMakefile = (
+	'NAME'          => 'Test::Output',
+	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
+	'ABSTRACT_FROM' => $main_file,
+	'VERSION_FROM'  => $main_file,
+	'LICENSE'       => 'perl',
+
+	'CONFIGURE_REQUIRES' => {
+		'ExtUtils::MakeMaker' => '6.64',
+		},
+
+	'BUILD_REQUIRES' => {
+		},
+
+	'TEST_REQUIRES' => {
+		'Test::More'    => '0.94',
 		'Test::Tester'  => '0.107',
 		'Test::More'    => '0',
+		},
+
+	'PREREQ_PM'     => {
 		'Sub::Exporter' => '0',
 		'File::Temp'    => '0.17', # needs :seekable
 		'Capture::Tiny' => '0.17',
 		},
 
-	(
-	$ExtUtils::MakeMaker::VERSION ge '6.48' ? 
-		(
-		MIN_PERL_VERSION => 5.006,
-
-		META_MERGE       => {
-			resources => {
-		  		repository => 'git://github.com/briandfoy/test-output.git',
+	'META_MERGE' => {
+		'meta-spec' => { version => 2 },
+		keywords => ['testing','STDOUT','STDERR'],
+		resources => {
+			repository => {
+				type => 'git',
+				url  => "$github.git",
+				web  => $github,
 				},
-			keywords => ['testing','STDOUT','STDERR'],
-	  		},
-	 	) 
-	 	: 
-	 	()
-	 ),
+			bugtraker => {
+				web    => "$github/issues",
+				},
+			homepage => $github,
+			},
+		},
 
-	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 	clean => { FILES    => 'Test-Output-*' },
-);
+	);
+
+sub arguments { \%WriteMakefile }
+
+do_it() unless caller;
+sub do_it {
+	require File::Spec;
+	my $MM ='ExtUtils::MakeMaker';
+	my $MM_version =
+		eval{ "$MM " . $WriteMakefile{'CONFIGURE_REQUIRES'}{'ExtUtils::MakeMaker'} }
+			//
+		"$MM 6.64";
+	eval "use $MM_version";
+	eval "use Test::Manifest 1.21" 
+		if -e File::Spec->catfile( qw(t test_manifest) );
+	WriteMakefile( %WriteMakefile );
+	}
+
+
+no warnings;
+__PACKAGE__;
