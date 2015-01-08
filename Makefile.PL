@@ -2,13 +2,14 @@ require 5.008;
 use strict;
 use warnings;
 
-eval "use Test::Tester";
+use File::Spec::Functions qw(catfile);
 
+my $module    = 'Test::Output';
 my $github    = 'https://github.com/briandfoy/test-output';
-my $main_file = 'lib/Test/Output.pm';
+my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
 my %WriteMakefile = (
-	'NAME'          => 'Test::Output',
+	'NAME'          => $module,
 	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
 	'ABSTRACT_FROM' => $main_file,
 	'VERSION_FROM'  => $main_file,
