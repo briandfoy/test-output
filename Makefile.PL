@@ -53,7 +53,7 @@ my %WriteMakefile = (
 			},
 		},
 
-	clean => { FILES    => 'Test-Output-*' },
+	clean => { FILES    => "$dist-*" },
 	);
 
 sub arguments { \%WriteMakefile }
