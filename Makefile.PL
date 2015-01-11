@@ -13,6 +13,8 @@ my $github    = 'https://github.com/briandfoy/test-output';
 my $main_file = catfile( 'lib', split /::/, "$module.pm" );
 
 my %WriteMakefile = (
+	'MIN_PERL_VERSION' => '5.008',
+
 	'NAME'          => $module,
 	'AUTHOR'        => 'brian d foy <bdfoy@cpan.org>',
 	'ABSTRACT_FROM' => $main_file,
