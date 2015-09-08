@@ -55,6 +55,8 @@ use Sub::Exporter -setup => {
 
 my $Test = Test::Builder->new;
 
+=encoding utf8
+
 =head1 NAME
 
 Test::Output - Utilities to test STDOUT and STDERR messages.
@@ -107,7 +109,7 @@ Test::Output provides a simple interface for testing output sent to STDOUT
 or STDERR. A number of different utilities are included to try and be as
 flexible as possible to the tester.
 
-Originally this module was designed not to have external requirements, 
+Originally this module was designed not to have external requirements,
 however, the features provided by L<Sub::Exporter> over what L<Exporter>
 provides is just to great to pass up.
 
@@ -356,10 +358,10 @@ sub stderr_unlike (&$;$$) {
    combined_isnt {... } $expected, 'description';
 
 combined_is() directs STDERR to STDOUT then captures STDOUT. This is
-equivalent to UNIXs 2>&1. The test passes if the combined STDOUT 
+equivalent to UNIXs 2>&1. The test passes if the combined STDOUT
 and STDERR from $coderef equals $expected.
 
-combined_isnt() passes if combined STDOUT and STDERR are not equal 
+combined_isnt() passes if combined STDOUT and STDERR are not equal
 to $expected.
 
 =cut
@@ -408,10 +410,10 @@ sub combined_isnt (&$;$$) {
    combined_unlike { ...} qr/$expected/, 'description';
 
 combined_like() is similar to combined_is() except that it compares a regex
-($expected) to STDOUT and STDERR captured from $codref. The test passes if 
+($expected) to STDOUT and STDERR captured from $codref. The test passes if
 the regex matches.
 
-combined_unlike() passes if the combined STDOUT and STDERR does not match 
+combined_unlike() passes if the combined STDOUT and STDERR does not match
 the regex.
 
 =back
@@ -480,7 +482,7 @@ functions. For example:
 
 is functionally equivalent to
 
-  stdout_is(sub {print "foo";},'foo') 
+  stdout_is(sub {print "foo";},'foo')
     && stderr_is(sub {print STDERR "bar";'bar');
 
 except that $coderef is only executed once.
@@ -494,16 +496,16 @@ ignores STDOUT or STDERR respectively.
 
 is the same as
 
-  stdout_is(sub {print "foo";},'foo') 
+  stdout_is(sub {print "foo";},'foo')
 
-output_isnt() provides the opposite function of output_is(). It is a 
+output_isnt() provides the opposite function of output_is(). It is a
 combination of stdout_isnt() and stderr_isnt().
 
   output_isnt(sub {print "foo"; print STDERR "bar";},'bar','foo');
 
 is functionally equivalent to
 
-  stdout_is(sub {print "foo";},'bar') 
+  stdout_is(sub {print "foo";},'bar')
     && stderr_is(sub {print STDERR "bar";'foo');
 
 As with output_is(), setting either $expected_stdout or $expected_stderr to
@@ -513,7 +515,7 @@ C<undef> ignores the output to that facility.
 
 is the same as
 
-  stderr_is(sub {print STDERR "bar";},'foo') 
+  stderr_is(sub {print STDERR "bar";},'foo')
 
 =cut
 
@@ -641,7 +643,7 @@ is the same as
 
   stdout_like(sub {print "foo"; print STDERR "bar";},qr/foo/);
 
-output_unlike() test pass if output from $coderef doesn't match 
+output_unlike() test pass if output from $coderef doesn't match
 $regex_stdout and $regex_stderr.
 
 =back
@@ -922,7 +924,7 @@ Currently maintained by brian d foy, C<bdfoy@cpan.org>.
 Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
 
 =head1 SOURCE AVAILABILITY
- 
+
 This module is in Github:
 
 	http://github.com/briandfoy/test-output/tree/master
