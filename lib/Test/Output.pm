@@ -753,55 +753,24 @@ sub output_unlike (&$$;$$) {
 
 =head1 EXPORTS
 
-By default, all tests are exported, however with the switch to L<Sub::Exporter>
-export groups are now available to better limit imports.
-
-To import tests for STDOUT:
-
-  use Test::Output qw(:stdout);
-
-To import tests STDERR:
-
-  use Test::Output qw(:stderr);
-
-To import just the functions:
-
-  use Test::Output qw(:functions);
-
-And to import all tests:
-
-  use Test::Output;
-
-The following is a list of group names and which functions are exported:
+By default, all subroutines are exported by default.
 
 =over 4
 
-=item stdout
+=item * :stdout
 
-stdout_is stdout_isnt stdout_like stdout_unlike
+=item * :stderr
 
-=item stderr
+=item * :functions - the subs with C<_from> at the end.
 
-stderr_is stderr_isnt stderr_like stderr_unlike
+=item * :output -
 
-=item output
+=item * :combined -
 
-output_is output_isnt output_like output_unlike
-
-=item combined
-
-combined_is combined_isnt combined_like combined_unlike
-
-=item tests
-
-All of the above, this is the default when no options are given.
+=item * :tests - everything (which is the same as the default)
 
 =back
 
-L<Sub::Exporter> allows for many other options, I encourage reading its
-documentation.
-
-=cut
 
 =head1 FUNCTIONS
 
