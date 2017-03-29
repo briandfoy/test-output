@@ -6,17 +6,11 @@ use strict;
 
 use Test::Builder;
 use Capture::Tiny qw/capture capture_stdout capture_stderr capture_merged/;
-use Sub::Exporter -setup => {
-  exports => [
-    qw(output_is output_isnt output_like output_unlike
-      stderr_is stderr_isnt stderr_like stderr_unlike
-      stdout_is stdout_isnt stdout_like stdout_unlike
-      combined_is combined_isnt combined_like combined_unlike
-      output_from stderr_from stdout_from combined_from
-      )
-  ],
-  groups => {
-    stdout => [
+
+use Exporter qw(import);
+
+our %EXPORT_TAGS = (
+	stdout => [
       qw(
         stdout_is stdout_isnt stdout_like stdout_unlike
         )
@@ -49,9 +43,18 @@ use Sub::Exporter -setup => {
         combined_is combined_isnt combined_like combined_unlike
         )
     ],
-    default => [ '-tests' ],
-  },
-};
+	);
+
+our @EXPORT_OK = keys %{
+		{
+		map { $_ => 1 }
+		map {
+			@{ $EXPORT_TAGS{$_} }
+			}
+		keys %EXPORT_TAGS
+		}
+	};
+
 
 my $Test = Test::Builder->new;
 
@@ -61,13 +64,9 @@ my $Test = Test::Builder->new;
 
 Test::Output - Utilities to test STDOUT and STDERR messages.
 
-=head1 VERSION
-
-Version 0.16
-
 =cut
 
-$VERSION = '1.03';
+$VERSION = '1.031';
 
 =head1 SYNOPSIS
 
@@ -941,7 +940,8 @@ be notified of progress on your bug as I make changes.
 Thanks to chromatic whose TieOut.pm was the basis for capturing output.
 
 Also thanks to rjbs for his help cleaning the documentation, and pushing me to
-L<Sub::Exporter>.
+L<Sub::Exporter>. (This feature has been removed since it uses none of
+L<Sub::Exporter>'s strengths).
 
 Thanks to David Wheeler for providing code block support and tests.
 
