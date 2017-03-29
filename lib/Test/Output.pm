@@ -67,11 +67,7 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =cut
 
-<<<<<<< HEAD
 our $VERSION = '1.032';
-=======
-$VERSION = '1.031';
->>>>>>> Remove Sub::Exporter from module
 
 =head1 SYNOPSIS
 
