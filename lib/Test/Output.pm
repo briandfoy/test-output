@@ -1,5 +1,4 @@
 package Test::Output;
-use vars qw($VERSION);
 
 use warnings;
 use strict;
@@ -66,7 +65,7 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =cut
 
-$VERSION = '1.031';
+our $VERSION = '1.031';
 
 =head1 SYNOPSIS
 
