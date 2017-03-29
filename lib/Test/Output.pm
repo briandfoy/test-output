@@ -44,7 +44,7 @@ our %EXPORT_TAGS = (
     ],
 	);
 
-our @EXPORT_OK = keys %{
+our @EXPORT = keys %{
 		{
 		map { $_ => 1 }
 		map {
