@@ -42,6 +42,15 @@ our %EXPORT_TAGS = (
         combined_is combined_isnt combined_like combined_unlike
         )
     ],
+    all => [
+      qw(
+        output_is output_isnt output_like output_unlike
+        stderr_is stderr_isnt stderr_like stderr_unlike
+        stdout_is stdout_isnt stdout_like stdout_unlike
+        combined_is combined_isnt combined_like combined_unlike
+        output_from stderr_from stdout_from combined_from
+        )
+    ],
 	);
 
 our @EXPORT = keys %{
@@ -53,7 +62,6 @@ our @EXPORT = keys %{
 		keys %EXPORT_TAGS
 		}
 	};
-
 
 my $Test = Test::Builder->new;
 
@@ -755,20 +763,21 @@ By default, all subroutines are exported by default.
 
 =over 4
 
-=item * :stdout
+=item * :stdout - the subs with C<stdout> in the name.
 
-=item * :stderr
+=item * :stderr - the subs with C<stderr> in the name.
 
 =item * :functions - the subs with C<_from> at the end.
 
-=item * :output -
+=item * :output - the subs with C<output> in the name.
 
-=item * :combined -
+=item * :combined - the subs with C<combined> in the name.
 
-=item * :tests - everything (which is the same as the default)
+=item * :tests - everything that outputs TAP
+
+=item * :all - everything (which is the same as the default)
 
 =back
-
 
 =head1 FUNCTIONS
 
