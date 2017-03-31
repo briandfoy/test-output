@@ -951,8 +951,7 @@ Thanks to Michael G Schwern for the solution to combining STDOUT and STDERR.
 
 Copyright 2005-2013 Shawn Sorichetti, All Rights Reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This module is licensed under the Artistic License 2.0.
 
 =cut
 
