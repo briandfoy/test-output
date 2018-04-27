@@ -926,7 +926,7 @@ Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
 
 This module is in Github:
 
-	http://github.com/briandfoy/test-output/tree/master
+	http://github.com/briandfoy/test-output
 
 =head1 BUGS
 
