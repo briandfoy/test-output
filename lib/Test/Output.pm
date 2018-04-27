@@ -1,5 +1,4 @@
 package Test::Output;
-use vars qw($VERSION);
 
 use warnings;
 use strict;
@@ -67,7 +66,7 @@ Version 0.16
 
 =cut
 
-$VERSION = '1.03';
+our $VERSION = '1.03';
 
 =head1 SYNOPSIS
 
