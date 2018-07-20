@@ -10,7 +10,7 @@
 
 =for HTML <a href="https://github.com/briandfoy/test-output/blob/master/LICENSE"><img src="https://img.shields.io/cpan/l/Test-Output.svg" /></a>
 
-=for HTML <a href="http://www.metacpan.org/module/Test::Output"><img src="https://img.shields.io/cpan/v/Test-Output.svg" /></A>
+=for HTML <a href="https://metacpan.org/pod/Test::Output"><img src="https://img.shields.io/cpan/v/Test-Output.svg" /></A>
 
 =head1 The Test::Output module
 
@@ -23,7 +23,7 @@ for any Perl module.
 
 To read about L<Test::Output>, look at the embedded documentation
 in the module itself. Inside the distribution, you can format it
-with L<perldoc|http://perldoc.perl.org/perldoc.html>:
+with L<perldoc|https://perldoc.perl.orgperldoc.html>:
 
 	% perldoc lib/Test/Output.pm
 
@@ -33,7 +33,7 @@ name instead of the file location:
 	% perldoc Test::Output
 
 You can read the documentation and inspect the meta data at
-L<MetaCPAN|http://www.metacpan.org/module/Test::Output>.
+L<MetaCPAN|https://metacpan.org/pod/Test::Output>.
 
 The standard module documentation has example uses in the SYNOPSIS
 section, but you can also look in the I<examples/> directory (if it's
