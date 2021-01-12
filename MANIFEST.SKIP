@@ -63,3 +63,6 @@
 \.lwpcookies
 Test-.*
 TODO
+\bMANIFEST\s\d
+\bChanges\s\d
+
