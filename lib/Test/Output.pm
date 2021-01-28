@@ -482,7 +482,7 @@ functions. For example:
 is functionally equivalent to
 
   stdout_is(sub {print "foo";},'foo')
-    && stderr_is(sub {print STDERR "bar";'bar');
+    && stderr_is(sub {print STDERR "bar";},'bar');
 
 except that $coderef is only executed once.
 
@@ -504,8 +504,8 @@ combination of stdout_isnt() and stderr_isnt().
 
 is functionally equivalent to
 
-  stdout_is(sub {print "foo";},'bar')
-    && stderr_is(sub {print STDERR "bar";'foo');
+  stdout_isnt(sub {print "foo";},'bar')
+    && stderr_isnt(sub {print STDERR "bar";},'foo');
 
 As with output_is(), setting either $expected_stdout or $expected_stderr to
 C<undef> ignores the output to that facility.
