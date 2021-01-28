@@ -948,7 +948,7 @@ Thanks to Michael G Schwern for the solution to combining STDOUT and STDERR.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2013 Shawn Sorichetti, All Rights Reserved.
+Copyright 2005-2021 Shawn Sorichetti, All Rights Reserved.
 
 This module is licensed under the Artistic License 2.0.
 
