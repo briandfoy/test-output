@@ -1,5 +1,8 @@
 Revision history for Perl module Test::Output
 
+1.032 2021-01-28T22:15:07Z
+	* Fix cut-n-paste error in docs (Github #6, hexcoder)
+
 1.03 - 2014-01-03
 	* Get rid of MYMETA
 
