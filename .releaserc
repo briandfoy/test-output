@@ -1,3 +1,2 @@
 cpan_user BDFOY
 skip_prereqs 1
-perls /usr/local/perls/perl-5.8.9/bin/perl:/usr/local/perls/perl-5.12.2/bin/perl5.12.2:/usr/local/perls/blead/bin/perl5.13.6:
