@@ -1,5 +1,11 @@
 Revision history for Perl module Test::Output
 
+1.034 2023-07-05T14:46:18Z
+	* Remove unnecessary -T from pod tests. Now that v5.38 allows you
+	to compile without taint support and those perls won't run if
+	they see a -T, these tests needlessly fail there.
+	* Edward Betts corrected some of the docs.
+
 1.033 2021-02-11T00:21:54Z
 	* v1.032 had some regressions because I released 1.031 from an
 	unmerged branch. https://github.com/briandfoy/test-output/issues/8
