@@ -6,7 +6,7 @@ use warnings;
 use strict;
 
 use Test::Builder;
-use Capture::Tiny qw/capture capture_stdout capture_stderr capture_merged/;
+use Capture::Tiny qw/capture capture_stdout capture_stderr capture_merged tee_merged/;
 
 use Exporter qw(import);
 
@@ -863,11 +863,12 @@ captures them. C<combined_from()> is equivalent to using C<< 2>&1 >> in UNIX.
 sub combined_from (&) {
   my $test = shift;
 
-  my $combined = capture_merged {
+  my $func = $ENV{PERL5_TEST_OUTPUT_TEE} ? 'tee_merged' : 'capture_merged';
+  my $combined = __PACKAGE__->can($func)->(sub {
     select( ( select(STDOUT), $| = 1 )[0] );
     select( ( select(STDERR), $| = 1 )[0] );
     $test->();
-  };
+  });
 
   return $combined;
 }
