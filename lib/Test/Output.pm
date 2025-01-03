@@ -893,7 +893,7 @@ sub _chkregex {
 
 =head1 AUTHOR
 
-Currently maintained by brian d foy, C<bdfoy@cpan.org>.
+Currently maintained by brian d foy, C<briandfoy@pobox.com>.
 
 Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
 
