@@ -73,3 +73,4 @@ TODO
 
 .downstream.json
 cpan_tester_reports
+\.claude/
